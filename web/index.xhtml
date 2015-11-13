@@ -53,6 +53,17 @@
             </h:dataTable>
            
         </h:form>
+        <h:form>
+            <h:dataTable var="sources" value="#{sourceController.all}">
+                <h:column>
+                    <f:facet name="header">
+                        <label>Source Name</label>
+                    </f:facet>
+                    <h:outputText value="#{sources.sourceName}"/>
+                </h:column>
+            </h:dataTable>
+           
+        </h:form>
     </h:body>
 </html>
 
