@@ -27,6 +27,14 @@
                     </f:facet>
                     <h:outputText value="#{sessions.timeStamp}"/>
                 </h:column>
+                <h:column>
+                    <f:facet name="header">
+                        <label>Session source name</label>
+                    </f:facet>
+                    <h:link value="#{sessions.sourceName}" outcome="Source">
+                        <f:param name="source" value="#{sessions.sourceName}"/>
+                        </h:link>
+                </h:column>
             </h:dataTable>
            
         </h:form>
@@ -50,19 +58,15 @@
                     </f:facet>
                     <h:outputText value="#{bounces.timeStamp}"/>
                 </h:column>
-            </h:dataTable>
-           
-        </h:form>
-        <h:form>
-            <h:dataTable var="sources" value="#{sourceController.all}">
                 <h:column>
                     <f:facet name="header">
-                        <label>Source Name</label>
+                        <label>Bounce source name</label>
                     </f:facet>
-                    <h:outputText value="#{sources.sourceName}"/>
+                        <h:link value="#{bounces.sourceName}" outcome="Source">
+                            <f:param name ="source" value="#{bounces.sourceName}"/>
+                        </h:link>
                 </h:column>
-            </h:dataTable>
-           
+            </h:dataTable>   
         </h:form>
     </h:body>
 </html>

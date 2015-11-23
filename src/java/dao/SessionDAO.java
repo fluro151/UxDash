@@ -23,7 +23,7 @@ public class SessionDAO {
         DataSource ds = (DataSource) InitialContext.doLookup("jdbc/uxdash");
 
         try (Connection conn = ds.getConnection(); PreparedStatement ps = conn.prepareStatement(
-                "Select id, value, timeStamp "
+                "Select id, value, timeStamp, sourceName "
                     + "from sessions "
                     + "where id = ? "
             );) {
@@ -35,6 +35,7 @@ public class SessionDAO {
                 result.setID(rs.getString("id"));
                 result.setValue(rs.getString("value"));
                 result.setTimeStamp(rs.getTimestamp("timeStamp"));
+                result.setSourceName(rs.getString("sourceName"));
             }
         }
 
@@ -46,7 +47,7 @@ public class SessionDAO {
         DataSource ds = (DataSource) InitialContext.doLookup("jdbc/uxdash");
         
         try (Connection conn = ds.getConnection(); PreparedStatement ps = conn.prepareStatement(
-                    "Select id, value, timeStamp "
+                    "Select id, value, timeStamp, sourceName "
                     + "from sessions "
                     
    
@@ -61,6 +62,7 @@ public class SessionDAO {
                 System.out.println("sessionid: " + rs.getString("id"));
                 result.setValue(rs.getString("value"));
                 result.setTimeStamp(rs.getTimestamp("timeStamp"));
+                result.setSourceName(rs.getString("sourceName"));
                 sessions.add(result);
             }
         }
@@ -73,7 +75,7 @@ public class SessionDAO {
         DataSource ds = (DataSource) InitialContext.doLookup("jdbc/uxdash");
 
         try (Connection conn = ds.getConnection(); PreparedStatement ps = conn.prepareStatement(
-                    "select id, value, timeStamp  "
+                    "select id, value, timeStamp, sourceName  "
                     + "from session "
                     + "where id = ? "
             );) {
@@ -86,6 +88,7 @@ public class SessionDAO {
                 result.setID(rs.getString("id"));
                 result.setValue(rs.getString("value"));
                 result.setTimeStamp(rs.getTimestamp("timeStamp"));
+                result.setSourceName(rs.getString("sourceName"));
             }
         }
 
@@ -97,14 +100,15 @@ public class SessionDAO {
             DataSource ds = (DataSource) InitialContext.doLookup("jdbc/uxdash");
             
             try (Connection conn = ds.getConnection(); PreparedStatement query = conn.prepareStatement(
-                    "insert into SESSIONS (id, sourceValue, SourceTimeStamp)"
-                    + "values (?, ?, ?)"
+                    "insert into SESSIONS (id, value, timeStamp, sourceName )"
+                    + "values (?, ?, ?, ? )"
             
             );) {
               
             query.setString(1, session.getID());
             query.setString(2, session.getValue());
             query.setTimestamp(3, session.getTimeStamp());
+            query.setString(4, session.getSourceName());
             
             query.execute();
                 

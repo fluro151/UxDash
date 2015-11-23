@@ -22,7 +22,7 @@ public class BounceDAO {
         DataSource ds = (DataSource) InitialContext.doLookup("jdbc/uxdash");
 
         try (Connection conn = ds.getConnection(); PreparedStatement ps = conn.prepareStatement(
-                "Select id, value, timeStamp "
+                "Select id, value, timeStamp, sourceName "
                     + "from bounces "
                     + "where id = ? "
             );) {
@@ -34,6 +34,7 @@ public class BounceDAO {
                 result.setID(rs.getString("id"));
                 result.setValue(rs.getString("value"));
                 result.setTimeStamp(rs.getTimestamp("timeStamp"));
+                result.setSourceName(rs.getString("sourceName"));
             }
         }
 
@@ -45,7 +46,7 @@ public class BounceDAO {
         DataSource ds = (DataSource) InitialContext.doLookup("jdbc/uxdash");
         
         try (Connection conn = ds.getConnection(); PreparedStatement ps = conn.prepareStatement(
-                    "Select id, value, timeStamp "
+                    "Select id, value, timeStamp, sourceName "
                     + "from bounces "
                     
    
@@ -60,6 +61,7 @@ public class BounceDAO {
                 System.out.println("bounceid: " + rs.getString("id"));
                 result.setValue(rs.getString("value"));
                 result.setTimeStamp(rs.getTimestamp("timeStamp"));
+                result.setSourceName(rs.getString("sourceName"));
                 bounces.add(result);
             }
         }
@@ -72,7 +74,7 @@ public class BounceDAO {
         DataSource ds = (DataSource) InitialContext.doLookup("jdbc/uxdash");
 
         try (Connection conn = ds.getConnection(); PreparedStatement ps = conn.prepareStatement(
-                    "select id, value, timeStamp  "
+                    "select id, value, timeStamp, sourceName  "
                     + "from bounce "
                     + "where id = ? "
             );) {
@@ -85,6 +87,7 @@ public class BounceDAO {
                 result.setID(rs.getString("id"));
                 result.setValue(rs.getString("value"));
                 result.setTimeStamp(rs.getTimestamp("timeStamp"));
+                result.setSourceName(rs.getString("sourceName"));
             }
         }
 

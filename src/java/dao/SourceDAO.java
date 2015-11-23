@@ -18,20 +18,26 @@ import javax.sql.DataSource;
  */ 
 public class SourceDAO {
     
-    public SourceDTO find(String id) throws SQLException, NamingException {
+    public SourceDTO find(String source) throws SQLException, NamingException {
         SourceDTO result = new SourceDTO();
         DataSource ds = (DataSource) InitialContext.doLookup("jdbc/uxdash");
 
         try (Connection conn = ds.getConnection(); PreparedStatement ps = conn.prepareStatement(
-                "Select sourceName "
-                    + "from sources "
+                "Select bounces.ID, bounces.value, sessions.value, bounces.timestamp, bounces.sourceName "
+                    + "from bounces join sessions "
+                    + "on bounces.id = sessions.id "
+                    + "where bounces.sourceName = ? "
                   );) {
             //Set parameters
-            ps.setString(1, id);
+            ps.setString(1, source);
+            System.out.println(source);
 
             ResultSet rs = ps.executeQuery();
             while (rs.next()) {
                 result.setSourceName(rs.getString("sourceName"));
+                result.setSessions(rs.getString("value"));
+                result.setBounces(rs.getString("value"));
+                result.setTimeStamp(rs.getTimestamp("timeStamp"));
                 
             }
         }
@@ -44,13 +50,9 @@ public class SourceDAO {
         DataSource ds = (DataSource) InitialContext.doLookup("jdbc/uxdash");
         
         try (Connection conn = ds.getConnection(); PreparedStatement ps = conn.prepareStatement(
-                    "Select sourceName "
+                    "Select * "
                     + "from sources "
-                    
-   
             );) {
-            
-            
             
             ResultSet rs = ps.executeQuery();
             while (rs.next()) {
@@ -63,27 +65,34 @@ public class SourceDAO {
         return sources;
     }
     
-        public SourceDTO listID(int id) throws SQLException, NamingException {
-        SourceDTO result = new SourceDTO();   
-        DataSource ds = (DataSource) InitialContext.doLookup("jdbc/uxdash");
-
-        try (Connection conn = ds.getConnection(); PreparedStatement ps = conn.prepareStatement(
-                    "select sourceName "
-                    + "from sources "
-                    
+        public ArrayList<SourceDTO> getSource(String source) throws NamingException, SQLException {
+            ArrayList<SourceDTO> sourceArray = new ArrayList<>();
+            SourceDTO sources  = new SourceDTO();
+            
+            DataSource ds = (DataSource) InitialContext.doLookup("jdbc/uxdash");
+            
+            try (Connection conn = ds.getConnection(); PreparedStatement ps = conn.prepareStatement(
+                    "Select bounces.ID, bounces.value, sessions.value, bounces.timestamp, bounces.sourceName "
+                    + "from bounces join sessions "
+                    + "on bounces.id = sessions.id "
+                    + "where bounces.sourceName = ? "
             );) {
-            ps.setInt(1, id);
-            /**
-             * Looping over every row in the result set *
-             */
-            ResultSet rs = ps.executeQuery();
-            while (rs.next()) {
-                result.setSourceName(rs.getString("sourceName"));
+                ps.setString(1, source);
+                System.out.println(source);
+                
+                ResultSet rs = ps.executeQuery();
+                while (rs.next()) {
+                    SourceDTO result = new SourceDTO();
+                    result.setSourceName(rs.getString("sourceName"));
+                    result.setSessions(rs.getString("value"));
+                    result.setBounces(rs.getString("value"));
+                    result.setTimeStamp(rs.getTimestamp("timeStamp"));
+                    
+                    sourceArray.add(result);
+                }
             }
+        return sourceArray;
         }
-
-        return result;
-    }
         
         public void add(SourceDTO source) throws NoSuchAlgorithmException, SQLException, NamingException {
             

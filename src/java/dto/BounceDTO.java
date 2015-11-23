@@ -11,6 +11,7 @@ public class BounceDTO implements Serializable {
     private String id;
     private String value;
     private  Timestamp timeStamp; 
+    private String sourceName;
     
     @Size (min=1)
     @NotNull
@@ -38,8 +39,13 @@ public class BounceDTO implements Serializable {
         this.timeStamp = timeStamp;
     }
     
+    public String getSourceName(){
+        return sourceName;
+    }
     
-    
+    public void setSourceName(String sourceName){
+        this.sourceName = sourceName;
+    }
     
        
     
