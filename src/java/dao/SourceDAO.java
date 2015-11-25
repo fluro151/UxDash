@@ -23,10 +23,11 @@ public class SourceDAO {
         DataSource ds = (DataSource) InitialContext.doLookup("jdbc/uxdash");
 
         try (Connection conn = ds.getConnection(); PreparedStatement ps = conn.prepareStatement(
-                "Select bounces.ID, bounces.value, sessions.value, bounces.timestamp, bounces.sourceName "
+                    "Select bounces.ID, bounces.value, sessions.value, bounces.timestamp, bounces.sourceName, sessions.sourceName "
                     + "from bounces join sessions "
                     + "on bounces.id = sessions.id "
-                    + "where bounces.sourceName = ? "
+                    + "where sessions.sourceName = ? "
+                    + "or bounces.sourceName = ? "
                   );) {
             //Set parameters
             ps.setString(1, source);
@@ -72,12 +73,14 @@ public class SourceDAO {
             DataSource ds = (DataSource) InitialContext.doLookup("jdbc/uxdash");
             
             try (Connection conn = ds.getConnection(); PreparedStatement ps = conn.prepareStatement(
-                    "Select bounces.ID, bounces.value, sessions.value, bounces.timestamp, bounces.sourceName "
+                    "Select bounces.ID, bounces.value, sessions.value, bounces.timestamp, bounces.sourceName , sessions.sourceName "
                     + "from bounces join sessions "
                     + "on bounces.id = sessions.id "
-                    + "where bounces.sourceName = ? "
+                    + "where sessions.sourceName = ? "
+                    + "or bounces.sourceName = ? "
             );) {
                 ps.setString(1, source);
+                ps.setString(2, source);
                 System.out.println(source);
                 
                 ResultSet rs = ps.executeQuery();

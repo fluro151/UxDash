@@ -1,6 +1,20 @@
-create table SESSIONS (
-    id int() not null,
-    sourceValue varchar(255),
-    sourceTimeStamp timestamp(),
-    primary key (id)
+create table "UXD".SESSIONS
+(
+	ID INTEGER not null primary key,
+	VALUE VARCHAR(255),
+	TIMESTAMP TIMESTAMP,
+	SOURCENAME VARCHAR(255)
+)
+
+create table "UXD".BOUNCES
+(
+        ID INTEGER not null primary key,
+	VALUE VARCHAR(255),
+	TIMESTAMP TIMESTAMP,
+	SOURCENAME VARCHAR(255)
+)
+
+create table "UXD".SOURCES
+(
+        SOURCENAME VARCHAR(255)
 )
