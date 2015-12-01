@@ -36,9 +36,9 @@ public class SourceDAO {
             ResultSet rs = ps.executeQuery();
             while (rs.next()) {
                 result.setSourceName(rs.getString("sourceName"));
-                result.setSessions(rs.getString("value"));
-                result.setBounces(rs.getString("value"));
-                result.setTimeStamp(rs.getTimestamp("timeStamp"));
+//                result.setSessionValue(rs.getString("value"));
+//                result.setBounceValue(rs.getString("value"));
+                result.setSourceTimestamp(rs.getTimestamp("timeStamp"));
                 
             }
         }
@@ -61,56 +61,80 @@ public class SourceDAO {
                 result.setSourceName(rs.getString("sourceName"));
                 sources.add(result);
             }
-        }
+        }   
         
         return sources;
     }
     
-        public ArrayList<SourceDTO> getSource(String source) throws NamingException, SQLException {
-            ArrayList<SourceDTO> sourceArray = new ArrayList<>();
+        public SourceDTO getSource(String source) throws NamingException, SQLException {
+            //ArrayList<SourceDTO> sourceArray = new ArrayList<>();
+            SourceDTO result = new SourceDTO();
             SourceDTO sources  = new SourceDTO();
             
             DataSource ds = (DataSource) InitialContext.doLookup("jdbc/uxdash");
             
             try (Connection conn = ds.getConnection(); PreparedStatement ps = conn.prepareStatement(
-                    "Select bounces.ID, bounces.value, sessions.value, bounces.timestamp, bounces.sourceName , sessions.sourceName "
-                    + "from bounces join sessions "
-                    + "on bounces.id = sessions.id "
-                    + "where sessions.sourceName = ? "
-                    + "or bounces.sourceName = ? "
+
+                    "Select sourceName "
+                    + "from sources "
+                    + "where sourceName = ? "
             );) {
                 ps.setString(1, source);
-                ps.setString(2, source);
                 System.out.println(source);
                 
                 ResultSet rs = ps.executeQuery();
                 while (rs.next()) {
-                    SourceDTO result = new SourceDTO();
                     result.setSourceName(rs.getString("sourceName"));
-                    result.setSessions(rs.getString("value"));
-                    result.setBounces(rs.getString("value"));
-                    result.setTimeStamp(rs.getTimestamp("timeStamp"));
                     
-                    sourceArray.add(result);
                 }
             }
-        return sourceArray;
+        return result;
         }
         
-        public void add(SourceDTO source) throws NoSuchAlgorithmException, SQLException, NamingException {
+        public ArrayList<SourceDTO> getSourceSessions(String source) throws NamingException, SQLException {
+            ArrayList<SourceDTO> sourceArray = new ArrayList<>();
+            SourceDTO sources = new SourceDTO();
             
             DataSource ds = (DataSource) InitialContext.doLookup("jdbc/uxdash");
             
-            try (Connection conn = ds.getConnection(); PreparedStatement query = conn.prepareStatement(
-                    "insert into SOURCES (sourceName)"
-            
+            try (Connection conn = ds.getConnection(); PreparedStatement ps = conn.prepareStatement(
+                    "select sources.sessionValue "
+                    + "from sources "
+//                    + "union "
+//                    + "select sum(cast(sessions.value as int)) " 
+//                    + "from sessions "
+//                    + "where sessions.sourceName = ? "
             );) {
-              
-            query.setString(1, source.getSourceName());
-            
-            query.execute();
                 
+                //ps.setString(1, source);
+                
+            
+                ResultSet rs = ps.executeQuery();
+                while (rs.next()) {
+                    SourceDTO result = new SourceDTO();
+                    result.setSessionValue(rs.getInt("sessionValue"));
+                    
+                    sourceArray.add(result);
+                    
+                }
             }
+            return sourceArray;
         }
-    
 }
+//        public void add(SourceDTO source) throws NoSuchAlgorithmException, SQLException, NamingException {
+//            
+//            DataSource ds = (DataSource) InitialContext.doLookup("jdbc/uxdash");
+//            
+//            try (Connection conn = ds.getConnection(); PreparedStatement query = conn.prepareStatement(
+//                    "insert into SOURCES (sourceName)"
+//            
+//            );) {
+//              
+//            query.setString(1, source.getSourceName());
+//            
+//            query.execute();
+//                
+//            }
+//        }
+    
+

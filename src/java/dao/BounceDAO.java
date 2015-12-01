@@ -69,6 +69,33 @@ public class BounceDAO {
         return bounces;
     }
     
+    
+    public ArrayList<BounceDTO> listRecords(String source) throws SQLException, NamingException {
+        ArrayList<BounceDTO> bounces = new ArrayList<>();
+        DataSource ds = (DataSource) InitialContext.doLookup("jdbc/uxdash");
+        
+        try (Connection conn = ds.getConnection(); PreparedStatement ps = conn.prepareStatement(
+        
+                "select id, value, timeStamp, sourceName "
+                + "from bounces "
+                + "where sourceName = ? "
+                
+        );) {
+            ps.setString(1, source);
+            
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                BounceDTO result = new BounceDTO();
+                result.setID(rs.getString("id"));
+                result.setValue(rs.getString("value"));
+                result.setTimeStamp(rs.getTimestamp("timeStamp"));
+                result.setSourceName(rs.getString("sourceName"));
+                bounces.add(result);
+            }
+        }
+        return bounces;
+    }
+    
         public BounceDTO listID(int id) throws SQLException, NamingException {
         BounceDTO result = new BounceDTO();   
         DataSource ds = (DataSource) InitialContext.doLookup("jdbc/uxdash");

@@ -19,9 +19,13 @@ import javax.naming.NamingException;
 public class SourceController implements Serializable{
     private SourceDTO source = new SourceDTO();
     private String temp = "";
-        
-    public SourceDTO getSourceName() {
+    
+    public SourceDTO getSource() {
         return source;
+    }
+
+    public void setSource(SourceDTO source) {
+        this.source = source;
     }
     
     public String getTemp() {
@@ -34,8 +38,8 @@ public class SourceController implements Serializable{
         this.temp = sDTO.getSourceName();
     }
     
-    public void setSourceName(SourceDTO source) {
-        this.source = source;
+    public void setSourceName(String source) {
+        this.source.setSourceName(source);
     }
     
     
@@ -47,19 +51,22 @@ public class SourceController implements Serializable{
         return sources;
     }
     
-    public void loadSource() throws SQLException, NamingException {
-        SourceDAO sourceDAO = new SourceDAO();
-        source = sourceDAO.find(source.getSourceName());
-    }
     
     public void loadSource(String source) throws SQLException, NamingException {
-        SourceDAO sourceDao = new SourceDAO();
-        this.source = sourceDao.find(source);
+        SourceDAO sourceDAO = new SourceDAO();
+        this.source = sourceDAO.getSource(source);
+        
     }
     
-    public ArrayList<SourceDTO> getSelectedSource(String source) throws SQLException, NamingException {
-        SourceDAO sourceDAO = new SourceDAO ();
-        ArrayList<SourceDTO> sDTO = sourceDAO.getSource(source);
-        return sDTO;
-    }
+//    public ArrayList<SourceDTO> getSourceSessions(String source) throws SQLException, NamingException {
+//        SourceDAO sourceDAO = new SourceDAO();
+//        ArrayList<SourceDTO> sDTO = sourceDAO.getSourceSessions(source);
+//        return sDTO;
+//    }
+    
+//    public void updateSessions() throws SQLException, NamingException {
+//        SourceDAO sourceDAO = new SourceDAO();
+//        sourceDAO.updateSessions(source);
+//        
+//    }
 }

@@ -10,6 +10,7 @@ import javax.enterprise.context.SessionScoped;
 
 import javax.inject.Named;
 import javax.naming.NamingException;
+import org.primefaces.model.chart.BarChartModel;
 /**
  *
  * @author Harry
@@ -19,6 +20,19 @@ import javax.naming.NamingException;
 public class SessionController implements Serializable{
     private SessionDTO session = new SessionDTO();
     private SessionDTO temp = new SessionDTO();
+    private BarChartModel model = new BarChartModel();
+
+    public void setModel(BarChartModel model) {
+        this.model = model;
+    }
+    
+    public BarChartModel getModel() throws SQLException, NamingException {
+        SessionDAO sessionDAO = new SessionDAO();
+        this.model = sessionDAO.getModel();
+        return model;
+    }
+    
+    
         
     public SessionDTO getSession() {
         return session;
@@ -41,6 +55,7 @@ public class SessionController implements Serializable{
         SessionDAO sessionDAO = new SessionDAO();
         ArrayList<SessionDTO> sessions = new ArrayList<>();
         sessions = sessionDAO.listAll();
+        
             
         return sessions;
     }
@@ -48,5 +63,13 @@ public class SessionController implements Serializable{
     public void loadSession() throws SQLException, NamingException {
         SessionDAO sessionDAO = new SessionDAO();
         session = sessionDAO.find(session.getID());
+    }
+    
+    public ArrayList<SessionDTO> getRecords (String source) throws SQLException, NamingException {
+        SessionDAO sessionDAO = new SessionDAO();
+        ArrayList<SessionDTO> sessions = new ArrayList<>();
+        sessions = sessionDAO.listRecords(source);
+        
+        return sessions;
     }
 }

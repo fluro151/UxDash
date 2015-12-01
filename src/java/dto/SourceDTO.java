@@ -9,9 +9,9 @@ import javax.validation.constraints.*;
  */
 public class SourceDTO implements Serializable {
     private String sourceName;
-    private String sessions;
-    private String bounces;
-    private Timestamp timeStamp;
+    private int sessionValue;
+    private int bounceValue;
+    private Timestamp sourceTimeStamp;
     
     @Size (min=1)
     @NotNull
@@ -23,26 +23,26 @@ public class SourceDTO implements Serializable {
         this.sourceName = sourceName;
     } 
     
-    public String getSessions(){
-        return sessions;
+    public int getSessionValue(){
+        return sessionValue;
     }
-    public void setSessions(String sessions){
-        this.sessions = sessions;
-    }
-    
-    public Timestamp getTimeStamp(){
-        return timeStamp;
+    public void setSessionValue(int sessionValue){
+        this.sessionValue = sessionValue;
     }
     
-    public void setTimeStamp(Timestamp timeStamp){
-        this.timeStamp = timeStamp;
+    public Timestamp getSourceTimestamp(){
+        return sourceTimeStamp;
     }
     
-    public String getBounces(){
-        return bounces;
+    public void setSourceTimestamp(Timestamp sourceTimeStamp){
+        this.sourceTimeStamp = sourceTimeStamp;
     }
     
-    public void setBounces(String bounces){
-        this.bounces = bounces;
+    public int getBounceValue(){
+        return bounceValue;
+    }
+    
+    public void setBounceValue(int bounceValue){
+        this.bounceValue = bounceValue;
     }
 }

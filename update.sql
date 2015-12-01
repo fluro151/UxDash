@@ -1,21 +1,19 @@
 ALTER TABLE SESSIONS
-ADD fileSource varchar(255);
+ADD sourceName varchar(255);
 
 ALTER TABLE BOUNCES
-ADD fileSource varchar(255);
+ADD sourceName varchar(255);
 
 UPDATE SESSIONS
-SET fileSource='LATTE'
-WHERE id=*;
+SET sourceName = 'LATTE';
 
 UPDATE BOUNCES
-SET fileSource='LOOP11'
-WHERE id=*;
+SET sourceName = 'LOOP11';
+
 
 delete from SESSIONS
-where sourceValue = null
+where 'value' = null ;
 
 delete from BOUNCES
-where sourceValue = null
+where 'value' = null ;
 
-drop table BOUNCES

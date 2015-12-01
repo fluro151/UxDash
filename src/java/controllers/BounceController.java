@@ -49,4 +49,12 @@ public class BounceController implements Serializable{
         BounceDAO bounceDAO = new BounceDAO();
         bounce = bounceDAO.find(bounce.getID());
     }
+    
+    public ArrayList<BounceDTO> getRecords(String source) throws SQLException, NamingException {
+        BounceDAO bounceDAO = new BounceDAO();
+        ArrayList<BounceDTO> bounces = new ArrayList<>();
+        bounces = bounceDAO.listRecords(source);
+        
+        return bounces;
+    }
 }

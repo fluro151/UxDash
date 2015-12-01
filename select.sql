@@ -1,8 +1,8 @@
 select * from SESSIONS
 select * from BOUNCES
 
-select BOUNCES.sourceValue, SESSIONS.sourceValue
+select BOUNCES.sourceName, SESSIONS.sourceName
 from BOUNCES join SESSIONS
-on BOUNCES.sourceTimeStamp = SESSIONS.sourceTimeStamp
-where sourceTimeStamp = '2015-11-07'
+lfet join bounces on bounces.id = sessions.id
+where bounces.sourceName = 'LATTE'
 

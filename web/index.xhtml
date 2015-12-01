@@ -1,12 +1,21 @@
 <?xml version='1.0' encoding='UTF-8' ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml"
-      xmlns:h="http://xmlns.jcp.org/jsf/html"
-      xmlns:f="http://xmlns.jcp.org/jsf/core">
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
+
     <h:head>
         <title>Facelet Title</title>
     </h:head>
     <h:body>
+        
+        <p:barChart id="horizontal" value="#{invoiceStatisticsBean.categoryModel}" legendPosition="se" style="height:300px" title="Horizontal Bar Chart" orientation="horizontal" min="0" max="200"/> 
+        <p:outputPanel> Test </p:outputPanel>
+        <p:barChart id="bar" value="#{sessionController.model}"/>
+        <p:outputPanel> Test2 </p:outputPanel>
+        
         <h:form>
             <h:dataTable var="sessions" value="#{sessionController.all}">
                 <h:column>
@@ -33,10 +42,11 @@
                     </f:facet>
                     <h:link value="#{sessions.sourceName}" outcome="Source">
                         <f:param name="source" value="#{sessions.sourceName}"/>
-                        </h:link>
+                    </h:link>
                 </h:column>
             </h:dataTable>
-           
+            
+
         </h:form>
         <h:form>
             <h:dataTable var="bounces" value="#{bounceController.all}">
@@ -62,12 +72,14 @@
                     <f:facet name="header">
                         <label>Bounce source name</label>
                     </f:facet>
-                        <h:link value="#{bounces.sourceName}" outcome="Source">
-                            <f:param name ="source" value="#{bounces.sourceName}"/>
-                        </h:link>
+                    <h:link value="#{bounces.sourceName}" outcome="Source">
+                        <f:param name ="source" value="#{bounces.sourceName}"/>
+                    </h:link>
                 </h:column>
             </h:dataTable>   
         </h:form>
+        <br />
+        <h:link outcome="welcomePrimefaces" value="Primefaces welcome page" />
     </h:body>
 </html>
 
