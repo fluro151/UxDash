@@ -3,6 +3,7 @@ package dto;
 import java.io.Serializable;
 import javax.validation.constraints.*;
 import java.sql.Timestamp;
+import java.sql.Date;
 import org.primefaces.model.chart.BarChartModel;
 /**
  *
@@ -14,6 +15,15 @@ public class SessionDTO implements Serializable {
     private  Timestamp timeStamp; 
     private String sourceName;
     private BarChartModel model;
+    private Date sessionDate;
+
+    public Date getDate() {
+        return sessionDate;
+    }
+
+    public void setDate(Date sessionDate) {
+        this.sessionDate = sessionDate;
+    }
 
     public BarChartModel getModel() {
         return model;

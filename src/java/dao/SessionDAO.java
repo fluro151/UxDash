@@ -29,7 +29,7 @@ public class SessionDAO {
         DataSource ds = (DataSource) InitialContext.doLookup("jdbc/uxdash");
 
         try (Connection conn = ds.getConnection(); PreparedStatement ps = conn.prepareStatement(
-                "Select id, value, timeStamp, sourceName "
+                "Select id, value, sessionDate, sourceName "
                     + "from sessions "
                     + "where id = ? "
             );) {
@@ -40,7 +40,7 @@ public class SessionDAO {
             while (rs.next()) {
                 result.setID(rs.getString("id"));
                 result.setValue(rs.getString("value"));
-                result.setTimeStamp(rs.getTimestamp("timeStamp"));
+                result.setDate(rs.getDate("sessionDate"));
                 result.setSourceName(rs.getString("sourceName"));
             }
         }
@@ -53,7 +53,7 @@ public class SessionDAO {
         DataSource ds = (DataSource) InitialContext.doLookup("jdbc/uxdash");
         
         try (Connection conn = ds.getConnection(); PreparedStatement ps = conn.prepareStatement(
-                    "Select id, value, timeStamp, sourceName "
+                    "Select id, value, sessionDate, sourceName "
                     + "from sessions "
                     
    
@@ -66,7 +66,7 @@ public class SessionDAO {
                 SessionDTO result = new SessionDTO();
                 result.setID(rs.getString("id"));
                 result.setValue(rs.getString("value"));
-                result.setTimeStamp(rs.getTimestamp("timeStamp"));
+                result.setDate(rs.getDate("sessionDate"));
                 result.setSourceName(rs.getString("sourceName"));
                 sessions.add(result);
             }
@@ -82,7 +82,7 @@ public class SessionDAO {
             
             try (Connection conn = ds.getConnection(); PreparedStatement ps = conn.prepareStatement(
                     
-                    "select id, value, timestamp, sourceName "
+                    "select id, value, sessionDate, sourceName "
                     +"from sessions "
                     +"where sourcename = ? "
                     
@@ -95,7 +95,7 @@ public class SessionDAO {
                     SessionDTO result = new SessionDTO();
                     result.setID(rs.getString("id"));
                     result.setValue(rs.getString("value"));
-                    result.setTimeStamp(rs.getTimestamp("timeStamp"));
+                    result.setDate(rs.getDate("sessionDate"));
                     result.setSourceName(rs.getString("sourceName"));
                     sessions.add(result);
                 }
@@ -108,7 +108,7 @@ public class SessionDAO {
         DataSource ds = (DataSource) InitialContext.doLookup("jdbc/uxdash");
 
         try (Connection conn = ds.getConnection(); PreparedStatement ps = conn.prepareStatement(
-                    "select id, value, timeStamp, sourceName  "
+                    "select id, value, sessionDate, sourceName  "
                     + "from sessions "
                     + "where id = ? "
             );) {
@@ -120,7 +120,7 @@ public class SessionDAO {
             while (rs.next()) {
                 result.setID(rs.getString("id"));
                 result.setValue(rs.getString("value"));
-                result.setTimeStamp(rs.getTimestamp("timeStamp"));
+                result.setDate(rs.getDate("sessionDate"));
                 result.setSourceName(rs.getString("sourceName"));
             }
         }
@@ -133,14 +133,14 @@ public class SessionDAO {
             DataSource ds = (DataSource) InitialContext.doLookup("jdbc/uxdash");
             
             try (Connection conn = ds.getConnection(); PreparedStatement query = conn.prepareStatement(
-                    "insert into SESSIONS (id, value, timeStamp, sourceName )"
+                    "insert into SESSIONS (id, value, sessionDate, sourceName )"
                     + "values (?, ?, ?, ? )"
             
             );) {
               
             query.setString(1, session.getID());
             query.setString(2, session.getValue());
-            query.setTimestamp(3, session.getTimeStamp());
+            query.setDate(3, session.getDate());
             query.setString(4, session.getSourceName());
             
             query.execute();
@@ -155,30 +155,26 @@ public class SessionDAO {
             DataSource ds = (DataSource) InitialContext.doLookup("jdbc/uxdash");
             
             try (Connection conn = ds.getConnection(); PreparedStatement ps = conn.prepareStatement(
-                    "select id, value, sourceName, timeStamp "
+                    "select sessionDate, sum(cast(value as int)) Total "
                     +"from sessions "
+                    +"group by sessionDate "
+                    +"order by sessionDate "
             );) {
+                
                 
                 ResultSet rs = ps.executeQuery();
                 String[] results = new String[4];
                 SessionDTO result = new SessionDTO();
                 while (rs.next()) {
-                    results[0] = rs.getString("id");
-                    results[1] = rs.getString("sourceName");
-                    results[2] = rs.getString("value");
-                    results[3] = rs.getString("timeStamp");
-                    result.setID(rs.getString("id"));
-                    result.setSourceName(rs.getString("sourceName"));
-                    result.setValue(rs.getString("value"));
-                    result.setTimeStamp(rs.getTimestamp("timeStamp"));
+                    result.setValue(rs.getString("total"));
+                    result.setDate(rs.getDate("sessionDate"));
+                    
+            
+  
+                sessions.set(result.getDate(), parseInt(result.getValue()));
+                sDTO.add(result);   
                 
-                sessions.set(result.getTimeStamp(), parseInt(result.getValue()));
-                sDTO.add(result);
-               // sessions.set(results[1], parseInt(results[2]));
-               // sessions.set(rs.getString("timeStamp"), parseInt(rs.getString("value")));
-                
-                }
-                
+            }
             }
 //            sessions.set("2004", 100);
 //            sessions.set("2005", 200);
@@ -206,20 +202,21 @@ public class SessionDAO {
             DataSource ds = (DataSource) InitialContext.doLookup("jdbc/uxdash");
             
             try (Connection conn = ds.getConnection(); PreparedStatement ps = conn.prepareStatement(
-                    "select value, timestamp, sourcename, id "
+                    "select sessionDate, sum(cast(value as int)) Total "
                     +"from sessions "
                     +"where sourceName = ? "
+                    +"group by sessionDate "
+                    +"order by sessionDate"
             );) {
                 ps.setString(1, source);
                 ResultSet rs = ps.executeQuery();
                 SessionDTO result = new SessionDTO();
                 while (rs.next()) {
-                    result.setID(rs.getString("id"));
-                    result.setSourceName(rs.getString("sourceName"));
-                    result.setValue(rs.getString("value"));
-                    result.setTimeStamp(rs.getTimestamp("timeStamp"));
+                    
+                    result.setValue(rs.getString("Total"));
+                    result.setDate(rs.getDate("sessionDate"));
                 
-                sessions.set(result.getTimeStamp(), parseInt(result.getValue()));
+                sessions.set(result.getDate(), parseInt(result.getValue()));
                 sDTO.add(result);
                 
                 }

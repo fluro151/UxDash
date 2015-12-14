@@ -22,7 +22,7 @@ public class Main {
     try{
     CSVLoader loader = new CSVLoader(getCon());
     
-    loader.loadCSV("C:/Users/Harrison/Documents/NetBeansProjects/uxdash/filey.csv", "SESSIONS", true);
+    loader.loadCSV("C:/Users/Harrison/Documents/NetBeansProjects/uxdash/file.csv", "SESSIONS", true);
     
     }   catch(Exception e) {
     e.printStackTrace();

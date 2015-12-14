@@ -29,6 +29,7 @@ public class SessionController implements Serializable{
     
     public BarChartModel getModel() throws SQLException, NamingException {
         SessionDAO sessionDAO = new SessionDAO();
+        Main.main();
         this.model = sessionDAO.getModel();
         return model;
     }

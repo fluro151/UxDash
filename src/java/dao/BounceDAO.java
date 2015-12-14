@@ -27,7 +27,7 @@ public class BounceDAO {
         DataSource ds = (DataSource) InitialContext.doLookup("jdbc/uxdash");
 
         try (Connection conn = ds.getConnection(); PreparedStatement ps = conn.prepareStatement(
-                "Select id, value, timeStamp, sourceName "
+                "Select id, value, bounceDate, sourceName "
                     + "from bounces "
                     + "where id = ? "
             );) {
@@ -38,7 +38,7 @@ public class BounceDAO {
             while (rs.next()) {
                 result.setID(rs.getString("id"));
                 result.setValue(rs.getString("value"));
-                result.setTimeStamp(rs.getTimestamp("timeStamp"));
+                result.setDate(rs.getDate("bounceDate"));
                 result.setSourceName(rs.getString("sourceName"));
             }
         }
@@ -51,7 +51,7 @@ public class BounceDAO {
         DataSource ds = (DataSource) InitialContext.doLookup("jdbc/uxdash");
         
         try (Connection conn = ds.getConnection(); PreparedStatement ps = conn.prepareStatement(
-                    "Select id, value, timeStamp, sourceName "
+                    "Select id, value, bounceDate, sourceName "
                     + "from bounces "
                     
    
@@ -64,7 +64,7 @@ public class BounceDAO {
                 BounceDTO result = new BounceDTO();
                 result.setID(rs.getString("id"));
                 result.setValue(rs.getString("value"));
-                result.setTimeStamp(rs.getTimestamp("timeStamp"));
+                result.setDate(rs.getDate("bounceDate"));
                 result.setSourceName(rs.getString("sourceName"));
                 bounces.add(result);
             }
@@ -80,7 +80,7 @@ public class BounceDAO {
         
         try (Connection conn = ds.getConnection(); PreparedStatement ps = conn.prepareStatement(
         
-                "select id, value, timeStamp, sourceName "
+                "select id, value, bounceDate, sourceName "
                 + "from bounces "
                 + "where sourceName = ? "
                 
@@ -92,7 +92,7 @@ public class BounceDAO {
                 BounceDTO result = new BounceDTO();
                 result.setID(rs.getString("id"));
                 result.setValue(rs.getString("value"));
-                result.setTimeStamp(rs.getTimestamp("timeStamp"));
+                result.setDate(rs.getDate("bounceDate"));
                 result.setSourceName(rs.getString("sourceName"));
                 bounces.add(result);
             }
@@ -105,7 +105,7 @@ public class BounceDAO {
         DataSource ds = (DataSource) InitialContext.doLookup("jdbc/uxdash");
 
         try (Connection conn = ds.getConnection(); PreparedStatement ps = conn.prepareStatement(
-                    "select id, value, timeStamp, sourceName  "
+                    "select id, value, bounceDate, sourceName  "
                     + "from bounce "
                     + "where id = ? "
             );) {
@@ -117,7 +117,7 @@ public class BounceDAO {
             while (rs.next()) {
                 result.setID(rs.getString("id"));
                 result.setValue(rs.getString("value"));
-                result.setTimeStamp(rs.getTimestamp("timeStamp"));
+                result.setDate(rs.getDate("bounceDate"));
                 result.setSourceName(rs.getString("sourceName"));
             }
         }
@@ -133,24 +133,21 @@ public class BounceDAO {
             DataSource ds = (DataSource) InitialContext.doLookup("jdbc/uxdash");
             
             try (Connection conn = ds.getConnection(); PreparedStatement ps = conn.prepareStatement(
-                    "select id, value, sourceName, timeStamp "
+                    "select bounceDate, sum(cast(value as int)) Total "
                     +"from bounces "
+                    +"group by bounceDate "
+                    +"order by bounceDate "
             );) {
                 
                 ResultSet rs = ps.executeQuery();
                 String[] results = new String[4];
                 BounceDTO result = new BounceDTO();
                 while (rs.next()) {
-                    results[0] = rs.getString("id");
-                    results[1] = rs.getString("sourceName");
-                    results[2] = rs.getString("value");
-                    results[3] = rs.getString("timeStamp");
-                    result.setID(rs.getString("id"));
-                    result.setSourceName(rs.getString("sourceName"));
-                    result.setValue(rs.getString("value"));
-                    result.setTimeStamp(rs.getTimestamp("timeStamp"));
+              
+                    result.setValue(rs.getString("Total"));
+                    result.setDate(rs.getDate("bounceDate"));
                 
-                bounces.set(result.getTimeStamp(), parseInt(result.getValue()));
+                bounces.set(result.getDate(), parseInt(result.getValue()));
                 
                // sessions.set(results[1], parseInt(results[2]));
                // sessions.set(rs.getString("timeStamp"), parseInt(rs.getString("value")));
@@ -184,21 +181,22 @@ public class BounceDAO {
             DataSource ds = (DataSource) InitialContext.doLookup("jdbc/uxdash");
             
             try (Connection conn = ds.getConnection(); PreparedStatement ps = conn.prepareStatement(
-                    "select id, value, sourceName, timeStamp "
+                    "select bounceDate, sum(cast(value as int)) Total "
                     +"from bounces "
                     +"where sourceName = ? "
+                    +"group by bounceDate "
+                    +"order by bounceDate "
+                    
             );) {
                 ps.setString(1, source);
                 ResultSet rs = ps.executeQuery();
                 BounceDTO result = new BounceDTO();
                 while (rs.next()) {
-                    
-                    result.setID(rs.getString("id"));
-                    result.setSourceName(rs.getString("sourceName"));
-                    result.setValue(rs.getString("value"));
-                    result.setTimeStamp(rs.getTimestamp("timeStamp"));
+                   
+                    result.setValue(rs.getString("Total"));
+                    result.setDate(rs.getDate("bounceDate"));
                 
-                bounces.set(result.getTimeStamp(), parseInt(result.getValue()));
+                bounces.set(result.getDate(), parseInt(result.getValue()));
                 
                 }
                 

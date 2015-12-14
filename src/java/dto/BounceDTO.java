@@ -1,6 +1,7 @@
 package dto;
 
 import java.io.Serializable;
+import java.sql.Date;
 import javax.validation.constraints.*;
 import java.sql.Timestamp;
 import org.primefaces.model.chart.BarChartModel;
@@ -14,6 +15,16 @@ public class BounceDTO implements Serializable {
     private  Timestamp timeStamp; 
     private String sourceName;
     private BarChartModel model;
+    private Date bounceDate;
+
+    public Date getDate() {
+        return bounceDate;
+    }
+
+    public void setDate(Date bounceDate) {
+        this.bounceDate = bounceDate;
+    }
+    
 
     public BarChartModel getModel() {
         return model;
