@@ -1,5 +1,6 @@
 package controllers;
 
+import csvConverter.*;
 import dto.*;
 import dao.*;
 import java.io.Serializable;
@@ -32,6 +33,12 @@ public class SessionController implements Serializable{
         return model;
     }
     
+    public BarChartModel getSourceModel(String source) throws SQLException, NamingException {
+        SessionDAO sessionDAO = new SessionDAO();
+        this.model = sessionDAO.getSourceModel(source);
+        return model;
+    }
+    
     
         
     public SessionDTO getSession() {
@@ -53,6 +60,7 @@ public class SessionController implements Serializable{
     
     public ArrayList<SessionDTO> getAll() throws SQLException, NamingException {
         SessionDAO sessionDAO = new SessionDAO();
+        Main.main();
         ArrayList<SessionDTO> sessions = new ArrayList<>();
         sessions = sessionDAO.listAll();
         

@@ -65,7 +65,6 @@ public class SessionDAO {
             while (rs.next()) {
                 SessionDTO result = new SessionDTO();
                 result.setID(rs.getString("id"));
-                System.out.println("sessionid: " + rs.getString("id"));
                 result.setValue(rs.getString("value"));
                 result.setTimeStamp(rs.getTimestamp("timeStamp"));
                 result.setSourceName(rs.getString("sourceName"));
@@ -152,7 +151,7 @@ public class SessionDAO {
         public BarChartModel getModel() throws SQLException, NamingException {
             BarChartModel model = new BarChartModel();
             ChartSeries sessions = new ChartSeries();
-            SessionDTO sDTO = new SessionDTO();
+            ArrayList<SessionDTO> sDTO = new ArrayList<>();
             DataSource ds = (DataSource) InitialContext.doLookup("jdbc/uxdash");
             
             try (Connection conn = ds.getConnection(); PreparedStatement ps = conn.prepareStatement(
@@ -161,8 +160,22 @@ public class SessionDAO {
             );) {
                 
                 ResultSet rs = ps.executeQuery();
+                String[] results = new String[4];
+                SessionDTO result = new SessionDTO();
                 while (rs.next()) {
-                sessions.set(rs.getString("timeStamp"), parseInt(rs.getString("value")));
+                    results[0] = rs.getString("id");
+                    results[1] = rs.getString("sourceName");
+                    results[2] = rs.getString("value");
+                    results[3] = rs.getString("timeStamp");
+                    result.setID(rs.getString("id"));
+                    result.setSourceName(rs.getString("sourceName"));
+                    result.setValue(rs.getString("value"));
+                    result.setTimeStamp(rs.getTimestamp("timeStamp"));
+                
+                sessions.set(result.getTimeStamp(), parseInt(result.getValue()));
+                sDTO.add(result);
+               // sessions.set(results[1], parseInt(results[2]));
+               // sessions.set(rs.getString("timeStamp"), parseInt(rs.getString("value")));
                 
                 }
                 
@@ -174,6 +187,46 @@ public class SessionDAO {
 //            sessions.set("2008", 500);
             model.addSeries(sessions);
             model.setTitle("TEST TITLE");
+            model.setLegendPosition("se");
+            
+            Axis xAxis = model.getAxis(AxisType.X);
+            xAxis.setLabel("Sessions");
+            
+            Axis yAxis = model.getAxis(AxisType.Y);
+            yAxis.setLabel("Session Count");
+            yAxis.setMin(0);
+            yAxis.setMax(500);
+            return model;
+        }
+        
+         public BarChartModel getSourceModel(String source) throws SQLException, NamingException {
+            BarChartModel model = new BarChartModel();
+            ChartSeries sessions = new ChartSeries();
+            ArrayList<SessionDTO> sDTO = new ArrayList<>();
+            DataSource ds = (DataSource) InitialContext.doLookup("jdbc/uxdash");
+            
+            try (Connection conn = ds.getConnection(); PreparedStatement ps = conn.prepareStatement(
+                    "select value, timestamp, sourcename, id "
+                    +"from sessions "
+                    +"where sourceName = ? "
+            );) {
+                ps.setString(1, source);
+                ResultSet rs = ps.executeQuery();
+                SessionDTO result = new SessionDTO();
+                while (rs.next()) {
+                    result.setID(rs.getString("id"));
+                    result.setSourceName(rs.getString("sourceName"));
+                    result.setValue(rs.getString("value"));
+                    result.setTimeStamp(rs.getTimestamp("timeStamp"));
+                
+                sessions.set(result.getTimeStamp(), parseInt(result.getValue()));
+                sDTO.add(result);
+                
+                }
+                
+            }
+            model.addSeries(sessions);
+            model.setTitle("Sessions by Source");
             model.setLegendPosition("se");
             
             Axis xAxis = model.getAxis(AxisType.X);

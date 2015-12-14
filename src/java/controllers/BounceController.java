@@ -10,6 +10,7 @@ import javax.enterprise.context.SessionScoped;
 
 import javax.inject.Named;
 import javax.naming.NamingException;
+import org.primefaces.model.chart.BarChartModel;
 /**
  *
  * @author Harry
@@ -19,6 +20,24 @@ import javax.naming.NamingException;
 public class BounceController implements Serializable{
     private BounceDTO bounce = new BounceDTO();
     private BounceDTO temp = new BounceDTO();
+    private BarChartModel model = new BarChartModel();
+
+    public BarChartModel getModel() throws SQLException, NamingException {
+        BounceDAO BounceDAO = new BounceDAO();
+        this.model = BounceDAO.getModel();
+        return model;
+    }
+    
+
+    public void setModel(BarChartModel model) {
+        this.model = model;
+    }
+    
+     public BarChartModel getSourceModel(String source) throws SQLException, NamingException {
+        BounceDAO BounceDAO = new BounceDAO();
+        this.model = BounceDAO.getSourceModel(source);
+        return model;
+    }
         
     public BounceDTO getSession() {
         return bounce;
