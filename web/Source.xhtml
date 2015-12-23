@@ -20,62 +20,62 @@
         </div>
         <h:form>
 <!-- Sessions tabl      -->
-       <h:dataTable var="SessionRecords" value="#{sessionController.getRecords(param.source)}">
-            <h:column>
+       <p:dataTable var="SessionRecords" value="#{sessionController.getRecords(param.source)}">
+            <p:column>
                 <f:facet name="header">
                     <label>Session ID </label>
                 </f:facet>
                 <h:outputText value="#{SessionRecords.ID}"/>
-            </h:column>
-           <h:column>
+            </p:column>
+           <p:column>
                 <f:facet name="header">
                     <label>Session Value </label>
                 </f:facet>
                 <h:outputText value="#{SessionRecords.value}"/>
-            </h:column>
-           <h:column>
+            </p:column>
+           <p:column>
                 <f:facet name="header">
                     <label>Session Date </label>
                 </f:facet>
                 <h:outputText value="#{SessionRecords.date}"/>
-            </h:column>
-           <h:column>
+            </p:column>
+           <p:column>
                 <f:facet name="header">
                     <label>Session Source </label>
                 </f:facet>
                 <h:outputText value="#{SessionRecords.sourceName}"/>
-            </h:column>
-        </h:dataTable>
+            </p:column>
+        </p:dataTable>
         <div>
             <p:barChart id="Bouncesbar" value="#{bounceController.getSourceModel(param.source)}"/>
             <p:outputPanel> Bounces by Source </p:outputPanel>
         </div>
-        <h:dataTable var="BounceRecords" value="#{bounceController.getRecords(param.source)}">    
-            <h:column>
+        <p:dataTable var="BounceRecords" value="#{bounceController.getRecords(param.source)}">    
+            <p:column>
                 <f:facet name="header">
                     <label>Bounce ID </label>
                 </f:facet>
                 <h:outputText value="#{BounceRecords.ID}"/>
-            </h:column>
-            <h:column>
+            </p:column>
+            <p:column>
                 <f:facet name="header">
                     <label>Bounce Value </label>
                 </f:facet>
                 <h:outputText value="#{BounceRecords.value}"/>
-            </h:column>
-           <h:column>
+            </p:column>
+           <p:column>
                 <f:facet name="header">
                     <label>Bounce Date </label>
                 </f:facet>
                 <h:outputText value="#{BounceRecords.date}"/>
-            </h:column>
-           <h:column>
+            </p:column>
+           <p:column>
                 <f:facet name="header">
                     <label>Bounce Source </label>
                 </f:facet>
                 <h:outputText value="#{BounceRecords.sourceName}"/>
-            </h:column>
-        </h:dataTable>
+            </p:column>
+        </p:dataTable>
         </h:form>
     </h:body>
 </html>

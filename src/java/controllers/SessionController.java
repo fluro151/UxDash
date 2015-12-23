@@ -29,7 +29,7 @@ public class SessionController implements Serializable{
     
     public BarChartModel getModel() throws SQLException, NamingException {
         SessionDAO sessionDAO = new SessionDAO();
-        Main.main();
+        
         this.model = sessionDAO.getModel();
         return model;
     }
@@ -61,9 +61,9 @@ public class SessionController implements Serializable{
     
     public ArrayList<SessionDTO> getAll() throws SQLException, NamingException {
         SessionDAO sessionDAO = new SessionDAO();
-        Main.main();
         ArrayList<SessionDTO> sessions = new ArrayList<>();
         sessions = sessionDAO.listAll();
+        
         
             
         return sessions;

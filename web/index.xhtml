@@ -2,86 +2,104 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:h="http://java.sun.com/jsf/html"
-      xmlns:f="http://java.sun.com/jsf/core"
       xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://java.sun.com/jsf/core"
       xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
 
     <h:head>
-        <title>Facelet Title</title>
+        <title>UxDash</title>
     </h:head>
     <h:body>
-        <div>
-            <p:barChart id="Sessionsbar" value="#{sessionController.model}"/>
-            <p:outputPanel> Sessions </p:outputPanel>
-        </div>
-        
-        <div>
+
+
+
         <h:form>
-            <h:dataTable var="sessions" value="#{sessionController.all}">
-                <h:column>
-                    <f:facet name="header">
-                        <label>Session Id</label>
-                    </f:facet>
-                    <h:outputText value="#{sessions.ID}"/>
-                </h:column>
-                <h:column>
-                    <f:facet name="header">
-                        <label>Session value</label>
-                    </f:facet>
-                    <h:outputText value="#{sessions.value}"/>
-                </h:column>
-                <h:column>
-                    <f:facet name="header">
-                        <label>Session timestamp</label>
-                    </f:facet>
-                    <h:outputText value="#{sessions.date}"/>
-                </h:column>
-                <h:column>
-                    <f:facet name="header">
-                        <label>Session source name</label>
-                    </f:facet>
-                    <h:link value="#{sessions.sourceName}" outcome="Source">
-                        <f:param name="source" value="#{sessions.sourceName}"/>
-                    </h:link>
-                </h:column>
-            </h:dataTable>
+            <p:outputPanel id="sessionWhole">
+                <p:selectOneMenu disabled="true" rendered="false">
+                    <p:ajax update="sessionsChart, sessionsData, sessionWhole" listener="#{contentController.uploadContent}"/>
+                </p:selectOneMenu>
+                <h:form>
+                    <p:outputPanel autoUpdate="true">
+                        <p:fileUpload id="upload" fileUploadListener="#{contentController.uploadContent}" mode="advanced" dragDropSupport="false"
+                                      update="messages" sizeLimit="100000" fileLimit="3" allowTypes="/(\.|\/)(csv|txt|xls|xlsx|doc|docx)$/"/>
+                        
+                        <p:chart id="sessionsChart"  type ="bar" model="#{sessionController.model}" />
+                        <p:outputPanel> Sessions </p:outputPanel>
+
+                        <p:growl id="messages" showDetail="true" />
+                    </p:outputPanel>
+                </h:form>
+                <h:form>
+                    <p:outputPanel>
+                        <p:dataTable id="sessionsData" var="sessions" value="#{sessionController.all}">
+                            <p:column>
+                                <f:facet name="header">
+                                    <label>Session Id</label>
+                                </f:facet>
+                                <h:outputText value="#{sessions.ID}"/>
+                            </p:column>
+                            <p:column>
+                                <f:facet name="header">
+                                    <label>Session value</label>
+                                </f:facet>
+                                <h:outputText value="#{sessions.value}"/>
+                            </p:column>
+                            <p:column>
+                                <f:facet name="header">
+                                    <label>Session timestamp</label>
+                                </f:facet>
+                                <h:outputText value="#{sessions.date}"/>
+                            </p:column>
+                            <p:column>
+                                <f:facet name="header">
+                                    <label>Session source name</label>
+                                </f:facet>
+                                <h:link value="#{sessions.sourceName}" outcome="Source">
+                                    <f:param name="source" value="#{sessions.sourceName}"/>
+                                </h:link>
+                            </p:column>
+                        </p:dataTable>
+
+                    </p:outputPanel>
+                </h:form>
+            </p:outputPanel> 
         </h:form>
-        </div>
+
         <div>
             <p:barChart id="Bouncesbar" value="#{bounceController.model}"/>
             <p:outputPanel> Bounces </p:outputPanel>
         </div>
         <div>
-        <h:form>
-            <h:dataTable var="bounces" value="#{bounceController.all}">
-                <h:column>
-                    <f:facet name="header">
-                        <label>Bounce Id</label>
-                    </f:facet>
-                    <h:outputText value="#{bounces.ID}"/>
-                </h:column>
-                <h:column>
-                    <f:facet name="header">
-                        <label>Bounce value</label>
-                    </f:facet>
-                    <h:outputText value="#{bounces.value}"/>
-                </h:column>
-                <h:column>
-                    <f:facet name="header">
-                        <label>Bounce Date</label>
-                    </f:facet>
-                    <h:outputText value="#{bounces.date}"/>
-                </h:column>
-                <h:column>
-                    <f:facet name="header">
-                        <label>Bounce source name</label>
-                    </f:facet>
-                    <h:link value="#{bounces.sourceName}" outcome="Source">
-                        <f:param name ="source" value="#{bounces.sourceName}"/>
-                    </h:link>
-                </h:column>
-            </h:dataTable>   
-        </h:form>
+            <h:form>
+                <p:dataTable var="bounces" value="#{bounceController.all}">
+                    <p:column>
+                        <f:facet name="header">
+                            <label>Bounce Id</label>
+                        </f:facet>
+                        <h:outputText value="#{bounces.ID}"/>
+                    </p:column>
+                    <p:column>
+                        <f:facet name="header">
+                            <label>Bounce value</label>
+                        </f:facet>
+                        <h:outputText value="#{bounces.value}"/>
+                    </p:column>
+                    <p:column>
+                        <f:facet name="header">
+                            <label>Bounce Date</label>
+                        </f:facet>
+                        <h:outputText value="#{bounces.date}"/>
+                    </p:column>
+                    <p:column>
+                        <f:facet name="header">
+                            <label>Bounce source name</label>
+                        </f:facet>
+                        <h:link value="#{bounces.sourceName}" outcome="Source">
+                            <f:param name ="source" value="#{bounces.sourceName}"/>
+                        </h:link>
+                    </p:column>
+                </p:dataTable>   
+            </h:form>
         </div>
     </h:body>
 </html>

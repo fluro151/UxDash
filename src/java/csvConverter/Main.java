@@ -9,20 +9,23 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 import oracle.jdbc.driver.OracleDriver;
-
-
+import org.primefaces.model.UploadedFile;
+import java.io.*;
+import java.net.*;
+import org.apache.commons.io.IOUtils;
 
 /**
  *
  * @author Harrison
  */
 public class Main {
-    
-    public static void main() {
+   
+    public static void main(String dirPath, String fileName){
     try{
     CSVLoader loader = new CSVLoader(getCon());
     
-    loader.loadCSV("C:/Users/Harrison/Documents/NetBeansProjects/uxdash/file.csv", "SESSIONS", true);
+    System.out.println(dirPath + fileName);
+    loader.loadCSV(dirPath + fileName, "SESSIONS", true);
     
     }   catch(Exception e) {
     e.printStackTrace();
