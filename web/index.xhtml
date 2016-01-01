@@ -8,29 +8,65 @@
 
     <h:head>
         <title>UxDash</title>
+
     </h:head>
     <h:body>
-
+        <script type="text/javascript">
+        <!--
+            function toggle_visibility(id) {
+                var e = document.getElementById(id);
+                if (e.style.display == 'block')
+                    e.style.display = 'none';
+                else
+                    e.style.display = 'block';
+            }
+        //-->
+        </script>
+        <style>
+            .display {
+                display: inline-block;
+                height: 300px;
+                width: 400px;
+                position: relative;
+                text-align: center;
+            }
+            body{
+                width: 100%;
+                margin: 0 auto;
+                text-align: center;
+                white-space: normal;
+            }
+        </style>
 
 
         <h:form>
-            <p:outputPanel id="sessionWhole">
+            <p:outputPanel>
                 <p:selectOneMenu disabled="true" rendered="false">
-                    <p:ajax update="sessionsChart, sessionsData, sessionWhole" listener="#{contentController.uploadContent}"/>
+                    <p:ajax update="sessionsChart" listener="#{contentController.uploadContent}"/>
                 </p:selectOneMenu>
-                <h:form>
-                    <p:outputPanel autoUpdate="true">
-                        <p:fileUpload id="upload" fileUploadListener="#{contentController.uploadContent}" mode="advanced" dragDropSupport="false"
-                                      update="messages" sizeLimit="100000" fileLimit="3" allowTypes="/(\.|\/)(csv|txt|xls|xlsx|doc|docx)$/"/>
-                        
-                        <p:chart id="sessionsChart"  type ="bar" model="#{sessionController.model}" />
-                        <p:outputPanel> Sessions </p:outputPanel>
 
+                <div autoUpdate="true">
+                    <div class="display">
                         <p:growl id="messages" showDetail="true" />
-                    </p:outputPanel>
-                </h:form>
-                <h:form>
-                    <p:outputPanel>
+
+                        <div>
+                            <a href="#" onclick="toggle_visibility('sessionPanel');">
+                                <p:chart id="sessionsChart"  type ="bar" model="#{sessionController.model}" style="width:400px;height:300px; margin: 0 auto;" />
+                            </a>
+                        </div>
+                    </div>
+
+                    <div class="display">
+                        <a href="#" onclick="toggle_visibility('bouncesPanel');">
+                            <p:chart id="Bouncesbar" type ="bar" model="#{bounceController.model}" style="width:400px;height:300px; margin: 0 auto;"/>
+                        </a>
+                    </div>
+                    <p:fileUpload id="upload" fileUploadListener="#{contentController.uploadContent}" mode="advanced" dragDropSupport="false"
+                                  update="messages" sizeLimit="100000" fileLimit="3" allowTypes="/(\.|\/)(csv|txt|xls|xlsx|doc|docx)$/"/>
+                </div>
+
+                <div id="sessionPanel" style="display: none">
+                    <h:form>
                         <p:dataTable id="sessionsData" var="sessions" value="#{sessionController.all}">
                             <p:column>
                                 <f:facet name="header">
@@ -59,48 +95,45 @@
                                 </h:link>
                             </p:column>
                         </p:dataTable>
+                    </h:form>
+                </div>    
 
-                    </p:outputPanel>
-                </h:form>
+
+                <div id="bouncesPanel" style="display: none">
+                    <h:form>
+                        <p:dataTable var="bounces" value="#{bounceController.all}">
+                            <p:column>
+                                <f:facet name="header">
+                                    <label>Bounce Id</label>
+                                </f:facet>
+                                <h:outputText value="#{bounces.ID}"/>
+                            </p:column>
+                            <p:column>
+                                <f:facet name="header">
+                                    <label>Bounce value</label>
+                                </f:facet>
+                                <h:outputText value="#{bounces.value}"/>
+                            </p:column>
+                            <p:column>
+                                <f:facet name="header">
+                                    <label>Bounce Date</label>
+                                </f:facet>
+                                <h:outputText value="#{bounces.date}"/>
+                            </p:column>
+                            <p:column>
+                                <f:facet name="header">
+                                    <label>Bounce source name</label>
+                                </f:facet>
+                                <h:link value="#{bounces.sourceName}" outcome="Source">
+                                    <f:param name ="source" value="#{bounces.sourceName}"/>
+                                </h:link>
+                            </p:column>
+                        </p:dataTable>   
+                    </h:form>
+                </div>
+
             </p:outputPanel> 
         </h:form>
-
-        <div>
-            <p:barChart id="Bouncesbar" value="#{bounceController.model}"/>
-            <p:outputPanel> Bounces </p:outputPanel>
-        </div>
-        <div>
-            <h:form>
-                <p:dataTable var="bounces" value="#{bounceController.all}">
-                    <p:column>
-                        <f:facet name="header">
-                            <label>Bounce Id</label>
-                        </f:facet>
-                        <h:outputText value="#{bounces.ID}"/>
-                    </p:column>
-                    <p:column>
-                        <f:facet name="header">
-                            <label>Bounce value</label>
-                        </f:facet>
-                        <h:outputText value="#{bounces.value}"/>
-                    </p:column>
-                    <p:column>
-                        <f:facet name="header">
-                            <label>Bounce Date</label>
-                        </f:facet>
-                        <h:outputText value="#{bounces.date}"/>
-                    </p:column>
-                    <p:column>
-                        <f:facet name="header">
-                            <label>Bounce source name</label>
-                        </f:facet>
-                        <h:link value="#{bounces.sourceName}" outcome="Source">
-                            <f:param name ="source" value="#{bounces.sourceName}"/>
-                        </h:link>
-                    </p:column>
-                </p:dataTable>   
-            </h:form>
-        </div>
     </h:body>
 </html>
 

@@ -171,7 +171,6 @@ public class SessionDAO {
 
         Axis yAxis = model.getAxis(AxisType.Y);
         yAxis.setLabel("Session Count");
-        yAxis.setMin(0);
 
         return model;
     }
@@ -211,9 +210,7 @@ public class SessionDAO {
         xAxis.setLabel("Date(by day)");
 
         Axis yAxis = model.getAxis(AxisType.Y);
-        yAxis.setLabel("Session Count");
-        yAxis.setMin(0);
-        yAxis.setMax(500);
+        yAxis.setLabel("Session Count");       
         return model;
     }
 

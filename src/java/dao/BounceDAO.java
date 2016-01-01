@@ -148,29 +148,19 @@ public class BounceDAO {
                     result.setDate(rs.getDate("bounceDate"));
                 
                 bounces.set(result.getDate(), parseInt(result.getValue()));
-                
-               // sessions.set(results[1], parseInt(results[2]));
-               // sessions.set(rs.getString("timeStamp"), parseInt(rs.getString("value")));
+
                 
                 }
                 
             }
-//            sessions.set("2004", 100);
-//            sessions.set("2005", 200);
-//            sessions.set("2006", 300);
-//            sessions.set("2007", 400);
-//            sessions.set("2008", 500);
             model.addSeries(bounces);
-            model.setTitle("TEST TITLE");
-            model.setLegendPosition("se");
+            model.setTitle("Bounces");
             
             Axis xAxis = model.getAxis(AxisType.X);
             xAxis.setLabel("Bounces");
             
             Axis yAxis = model.getAxis(AxisType.Y);
             yAxis.setLabel("Bounce Count");
-            yAxis.setMin(0);
-            yAxis.setMax(500);
             return model;
         }
          
@@ -210,8 +200,6 @@ public class BounceDAO {
             
             Axis yAxis = model.getAxis(AxisType.Y);
             yAxis.setLabel("Bounce Count");
-            yAxis.setMin(0);
-            yAxis.setMax(500);
             return model;
         }
     
