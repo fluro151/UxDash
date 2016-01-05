@@ -12,7 +12,7 @@
     </h:head>
     <h:body>
         <script type="text/javascript">
-        <!--
+            <!--
             function toggle_visibility(id) {
                 var e = document.getElementById(id);
                 if (e.style.display == 'block')
@@ -20,7 +20,8 @@
                 else
                     e.style.display = 'block';
             }
-        //-->
+
+            //-->
         </script>
         <style>
             .display {
@@ -39,12 +40,8 @@
         </style>
 
 
-        <h:form>
+        <h:form id="form">
             <p:outputPanel>
-                <p:selectOneMenu disabled="true" rendered="false">
-                    <p:ajax update="sessionsChart" listener="#{contentController.uploadContent}"/>
-                </p:selectOneMenu>
-
                 <div autoUpdate="true">
                     <div class="display">
                         <p:growl id="messages" showDetail="true" />
@@ -61,11 +58,13 @@
                             <p:chart id="Bouncesbar" type ="bar" model="#{bounceController.model}" style="width:400px;height:300px; margin: 0 auto;"/>
                         </a>
                     </div>
-                    <p:fileUpload id="upload" fileUploadListener="#{contentController.uploadContent}" mode="advanced" dragDropSupport="false"
-                                  update="messages" sizeLimit="100000" fileLimit="3" allowTypes="/(\.|\/)(csv|txt|xls|xlsx|doc|docx)$/"/>
+
+
+                    <p:fileUpload id="upload"  fileUploadListener="#{contentController.uploadContent}"  mode="advanced" dragDropSupport="false"
+                                  update="form" sizeLimit="100000" fileLimit="3" allowTypes="/(\.|\/)(csv|txt|xls|xlsx|doc|docx)$/"/>
                 </div>
 
-                <div id="sessionPanel" style="display: none">
+                <div id="sessionPanel" style="display: none" autoUpdate="true">
                     <h:form>
                         <p:dataTable id="sessionsData" var="sessions" value="#{sessionController.all}">
                             <p:column>
