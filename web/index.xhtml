@@ -30,40 +30,118 @@
                 width: 400px;
                 position: relative;
                 text-align: center;
+                margin: 20px;
             }
             body{
+                
                 width: 100%;
                 margin: 0 auto;
                 text-align: center;
                 white-space: normal;
             }
+            ::-webkit-scrollbar { 
+    display: none; 
+}
         </style>
 
 
         <h:form id="form">
+            <p:fileUpload id="upload"  fileUploadListener="#{contentController.uploadContent}"  mode="advanced" dragDropSupport="false"
+                                  update="form" sizeLimit="100000" fileLimit="3" allowTypes="/(\.|\/)(csv|txt|xls|xlsx|doc|docx)$/"/>
             <p:outputPanel>
                 <div autoUpdate="true">
                     <div class="display">
                         <p:growl id="messages" showDetail="true" />
 
+                        <div class="display">
+                        <a href="#" onclick="toggle_visibility('sessionPanel');">
+                            <p:chart id="sessionBar" type ="bar" model="#{sessionController.model}" style="width:400px;height:300px; margin: 0 auto;"/>
+                        </a>
+                            
+                    </div>
                         <div>
-                            <a href="#" onclick="toggle_visibility('sessionPanel');">
-                                <p:chart id="sessionsChart"  type ="bar" model="#{sessionController.model}" style="width:400px;height:300px; margin: 0 auto;" />
+                            <a href="#" onclick="toggle_visibility('gaSessionsPanel');">
+                                <p:lineChart id="sessionsChart" value="#{gaController.lineModel}" style="width:400px;height:300px; margin: 0 auto;" title="Sessions/Date" xaxisLabel="Date" yaxisLabel="Session Count"/>
                             </a>
                         </div>
                     </div>
 
                     <div class="display">
-                        <a href="#" onclick="toggle_visibility('bouncesPanel');">
-                            <p:chart id="Bouncesbar" type ="bar" model="#{bounceController.model}" style="width:400px;height:300px; margin: 0 auto;"/>
+                        <a href="#" onclick="toggle_visibility('gaBouncesPanel');">
+                            <p:chart id="Bouncesbar" type ="bar" model="#{gaController.barModel}" style="width:400px;height:300px; margin: 0 auto;"/>
                         </a>
                     </div>
-
-
-                    <p:fileUpload id="upload"  fileUploadListener="#{contentController.uploadContent}"  mode="advanced" dragDropSupport="false"
-                                  update="form" sizeLimit="100000" fileLimit="3" allowTypes="/(\.|\/)(csv|txt|xls|xlsx|doc|docx)$/"/>
+                    
+                    <div class="display">
+                        <a href="#" onclick="toggle_visibility('npsPanel');">
+                            <p:chart id="npsChart" type="metergauge" model="#{npsController.model}" style="width:400px;height:300px;margin: 0 auto;"/>
+                        </a>
+                    </div>
+                    
+                    <div class="display">
+                        <a href="#" onclick="toggle_visibility('gaDevicesPanel');">
+                            <p:chart id="Devicesbar" type ="pie" model="#{gaController.deviceModel}" style="width:400px;height:300px; margin: 0 auto;"/>
+                        </a>
+                    </div>
                 </div>
+                
 
+                <div id="gaSessionsPanel" style="display: none">
+                    <h:form>
+                        <p:dataTable var="sessions" value="#{gaController.all}">
+                            <p:column>
+                                <f:facet name="header">
+                                    <label>Access Date</label>
+                                </f:facet>
+                                <h:outputText value="#{sessions.accessDate}"/>
+                            </p:column>
+                            <p:column>
+                                <f:facet name="header">
+                                    <label>Sessions</label>
+                                </f:facet>
+                                <h:outputText value="#{sessions.sessions}"/>
+                            </p:column>
+                            <p:column>
+                                <f:facet name="header">
+                                    <label>Session duration</label>
+                                </f:facet>
+                                <h:outputText value="#{sessions.sessionDuration}"/>
+                            </p:column>
+                            <p:column>
+                                <f:facet name="header">
+                                    <label>Session Browser</label>
+                                </f:facet>
+                                <h:outputText value="#{sessions.browser}"/>
+                            </p:column>
+                            <p:column>
+                                <f:facet name="header">
+                                    <label>Session Device</label>
+                                </f:facet>
+                                <h:outputText value="#{sessions.mobileDeviceBranding}"/>
+                            </p:column>
+                            <p:column>
+                                <f:facet name="header">
+                                    <label>Session OS</label>
+                                </f:facet>
+                                <h:outputText value="#{sessions.operatingSystem}"/>
+                            </p:column>
+                            <p:column>
+                                <f:facet name="header">
+                                    <label>Session web</label>
+                                </f:facet>
+                                <h:outputText value="#{sessions.webSource}"/>
+                            </p:column>
+                            <p:column>
+                                <f:facet name="header">
+                                    <label>Session Web Source</label>
+                                </f:facet>
+                                <h:link value="#{sessions.dataSource}" outcome="Source">
+                                    <f:param name ="source" value="#{sessions.dataSource}"/>
+                                </h:link>
+                            </p:column>
+                        </p:dataTable>   
+                    </h:form>
+                </div>
                 <div id="sessionPanel" style="display: none" autoUpdate="true">
                     <h:form>
                         <p:dataTable id="sessionsData" var="sessions" value="#{sessionController.all}">
@@ -97,7 +175,56 @@
                     </h:form>
                 </div>    
 
-
+                <div id="gaBouncesPanel" style="display: none">
+                    <h:form>
+                        <p:dataTable var="bounces" value="#{gaController.all}">
+                            <p:column>
+                                <f:facet name="header">
+                                    <label>Access Date</label>
+                                </f:facet>
+                                <h:outputText value="#{bounces.accessDate}"/>
+                            </p:column>
+                            <p:column>
+                                <f:facet name="header">
+                                    <label>Bounces</label>
+                                </f:facet>
+                                <h:outputText value="#{bounces.bounces}"/>
+                            </p:column>
+                            <p:column>
+                                <f:facet name="header">
+                                    <label>Bounce Rate</label>
+                                </f:facet>
+                                <h:outputText value="#{bounces.bounceRate}"/>
+                            </p:column>
+                            <p:column>
+                                <f:facet name="header">
+                                    <label>Session Browser</label>
+                                </f:facet>
+                                <h:outputText value="#{bounces.browser}"/>
+                            </p:column>
+                            <p:column>
+                                <f:facet name="header">
+                                    <label>Session Device</label>
+                                </f:facet>
+                                <h:outputText value="#{bounces.mobileDeviceBranding}"/>
+                            </p:column>
+                            <p:column>
+                                <f:facet name="header">
+                                    <label>Session OS</label>
+                                </f:facet>
+                                <h:outputText value="#{bounces.operatingSystem}"/>
+                            </p:column>
+                            <p:column>
+                                <f:facet name="header">
+                                    <label>Bounce Web Source</label>
+                                </f:facet>
+                                <h:link value="#{bounces.webSource}" outcome="Source">
+                                    <f:param name ="source" value="#{bounces.webSource}"/>
+                                </h:link>
+                            </p:column>
+                        </p:dataTable>   
+                    </h:form>
+                </div>
                 <div id="bouncesPanel" style="display: none">
                     <h:form>
                         <p:dataTable var="bounces" value="#{bounceController.all}">
@@ -127,6 +254,33 @@
                                     <f:param name ="source" value="#{bounces.sourceName}"/>
                                 </h:link>
                             </p:column>
+                        </p:dataTable>   
+                    </h:form>
+                </div>
+                
+                
+                <div id="npsPanel" style="display:none">
+                    <h:form>
+                        <p:dataTable var="nps" value="#{npsController.all}">
+                            <p:column>
+                                <f:facet name="header">
+                                    <label>Promoting Participants</label>
+                                </f:facet>
+                                <h:outputText value="#{nps.taskPromoters}"/>
+                            </p:column>
+                            <p:column>
+                                <f:facet name="header">
+                                    <label>Detracting Participants</label>
+                                </f:facet>
+                                <h:outputText value="#{nps.taskDetractors}"/>
+                            </p:column>
+                            <p:column>
+                                <f:facet name="header">
+                                    <label>Net Promoter Score</label>
+                                </f:facet>
+                                <h:outputText value="#{nps.npsWhole}"/>
+                            </p:column>
+                            
                         </p:dataTable>   
                     </h:form>
                 </div>

@@ -6,6 +6,7 @@
       xmlns:p="http://primefaces.org/ui">
     <f:metadata>
         <f:viewAction action="#{sourceController.loadSource(param.source)}" />
+        
     </f:metadata>
     <h:head>
         <title>Source Page</title>
@@ -14,6 +15,7 @@
         <h3>
             <h:outputText value="#{sourceController.source.sourceName}" />'s Source Page
         </h3>
+        <a href ="/uxdash"> BACK </a>
         <div>
             <p:barChart id="Sessionsbar" value="#{sessionController.getSourceModel(param.source)}"/>
             <p:outputPanel> Sessions by Source </p:outputPanel>
