@@ -49,7 +49,7 @@ public class GaDAO {
             }
             
         }
-
+        
         model.setTitle("Device Usage");
         model.setLegendPosition("e");
         model.setDataFormat("value");
@@ -119,6 +119,7 @@ public class GaDAO {
             
         }
         model.addSeries(bounces);
+        model.setAnimate(true);
         model.setTitle("Bounces/Date");
         Axis xAxis = model.getAxis(AxisType.X);
         xAxis.setLabel("Date");
@@ -151,6 +152,7 @@ public class GaDAO {
             }
     }
         model.addSeries(sessions);
+        
         model.setTitle("Sessions/Date");
         Axis xAxis = model.getAxis(AxisType.X);
         xAxis.setLabel("Date");

@@ -165,7 +165,7 @@ public class SessionDAO {
         }
         model.addSeries(sessions);
         model.setTitle("Sessions");
-
+        model.setAnimate(true);
         Axis xAxis = model.getAxis(AxisType.X);
         xAxis.setLabel("Sessions");
 

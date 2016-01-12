@@ -15,17 +15,17 @@
             <!--
             function toggle_visibility(id) {
                 var e = document.getElementById(id);
-                if (e.style.display == 'block')
+                if (e.style.display == 'inline-table')
                     e.style.display = 'none';
                 else
-                    e.style.display = 'block';
+                    e.style.display = 'inline-table';
             }
 
             //-->
         </script>
         <style>
             .display {
-                display: inline-block;
+                display: inline-table;
                 height: 300px;
                 width: 400px;
                 position: relative;
@@ -42,50 +42,131 @@
             ::-webkit-scrollbar { 
     display: none; 
 }
+.button {
+    text-decoration: none;
+    display: inline-table;
+    padding: 5px 15px;
+    outline: none;
+    text-decoration: none;
+    text-align: center;
+    font-size: 14px;
+    color: white;
+    text-shadow: none;
+    font-weight: normal;
+    background-color: #66BB6A;
+    border-radius: 2px;
+    text-shadow: none;
+    font-family: arial;
+    cursor: pointer;
+    
+    
+    
+    
+    
+}
         </style>
 
 
         <h:form id="form">
             <p:fileUpload id="upload"  fileUploadListener="#{contentController.uploadContent}"  mode="advanced" dragDropSupport="false"
                                   update="form" sizeLimit="100000" fileLimit="3" allowTypes="/(\.|\/)(csv|txt|xls|xlsx|doc|docx)$/"/>
+            <span class="button">
+                <a href="#" class="button" onclick="toggle_visibility('sessionBar');">Toggle</a>
+            </span>
             <p:outputPanel>
                 <div autoUpdate="true">
-                    <div class="display">
-                        <p:growl id="messages" showDetail="true" />
 
-                        <div class="display">
+
+                    <p:growl id="messages" showDetail="true" />
+
+                    <div id="sessionBar" class="display">
                         <a href="#" onclick="toggle_visibility('sessionPanel');">
-                            <p:chart id="sessionBar" type ="bar" model="#{sessionController.model}" style="width:400px;height:300px; margin: 0 auto;"/>
+                            <p:chart id="sessionsBar" type ="bar" model="#{sessionController.model}" style="width:400px;height:300px; margin: 0 auto;"/>
+                        </a>      
+                    </div>
+
+                    <div id="gaSession" class="display">
+                        <a href="#" onclick="toggle_visibility('gaSessionsPanel');">
+                            <p:lineChart id="sessionsChart" value="#{gaController.lineModel}"  animate="true" style="width:400px;height:300px; margin: 0 auto;" title="Sessions/Date" xaxisLabel="Date" yaxisLabel="Session Count"/>
                         </a>
-                            
                     </div>
-                        <div>
-                            <a href="#" onclick="toggle_visibility('gaSessionsPanel');">
-                                <p:lineChart id="sessionsChart" value="#{gaController.lineModel}" style="width:400px;height:300px; margin: 0 auto;" title="Sessions/Date" xaxisLabel="Date" yaxisLabel="Session Count"/>
-                            </a>
-                        </div>
-                    </div>
+
 
                     <div class="display">
                         <a href="#" onclick="toggle_visibility('gaBouncesPanel');">
                             <p:chart id="Bouncesbar" type ="bar" model="#{gaController.barModel}" style="width:400px;height:300px; margin: 0 auto;"/>
                         </a>
                     </div>
-                    
+
                     <div class="display">
                         <a href="#" onclick="toggle_visibility('npsPanel');">
                             <p:chart id="npsChart" type="metergauge" model="#{npsController.model}" style="width:400px;height:300px;margin: 0 auto;"/>
                         </a>
                     </div>
-                    
+
                     <div class="display">
-                        <a href="#" onclick="toggle_visibility('gaDevicesPanel');">
+                        <a href="#" onclick="toggle_visibility('gaDevicePanel');">
                             <p:chart id="Devicesbar" type ="pie" model="#{gaController.deviceModel}" style="width:400px;height:300px; margin: 0 auto;"/>
                         </a>
                     </div>
                 </div>
                 
-
+<div id="gaBouncesPanel" style="display: none">
+                    <h:form>
+                        <p:dataTable var="bounces" value="#{gaController.all}" sortMode="multiple">
+                            <p:column sortBy="#{bounces.accessDate}">
+                                <f:facet name="header">
+                                    <label>Access Date</label>
+                                </f:facet>
+                                <h:outputText value="#{bounces.accessDate}"/>
+                            </p:column>
+                            <p:column sortBy="#{bounces.bounces}">
+                                <f:facet name="header" >
+                                    <label>Bounces</label>
+                                </f:facet>
+                                <h:outputText value="#{bounces.bounces}"/>
+                            </p:column>
+                            <p:column sortBy="#{bounces.bounceRate}">
+                                <f:facet name="header">
+                                    <label>Bounce Rate</label>
+                                </f:facet>
+                                <h:outputText value="#{bounces.bounceRate}"/>
+                            </p:column>
+                            <p:column sortBy="#{bounces.browser}">
+                                <f:facet name="header">
+                                    <label>Session Browser</label>
+                                </f:facet>
+                                <h:outputText value="#{bounces.browser}"/>
+                            </p:column>
+                            <p:column sortBy="#{bounces.mobileDeviceBranding}">
+                                <f:facet name="header">
+                                    <label>Session Device</label>
+                                </f:facet>
+                                <h:outputText value="#{bounces.mobileDeviceBranding}"/>
+                            </p:column>
+                            <p:column sortBy="#{bounces.operatingSystem}">
+                                <f:facet name="header">
+                                    <label>Session OS</label>
+                                </f:facet>
+                                <h:outputText value="#{bounces.operatingSystem}"/>
+                            </p:column>
+                            <p:column sortBy="#{bounces.webSource}">
+                                <f:facet name="header">
+                                    <label>Session web</label>
+                                </f:facet>
+                                <h:outputText value="#{bounces.webSource}"/>
+                            </p:column>
+                            <p:column sortBy="#{bounces.dataSource}">
+                                <f:facet name="header">
+                                    <label>Session Web Source</label>
+                                </f:facet>
+                                <h:link value="#{bounces.dataSource}" outcome="Source">
+                                    <f:param name ="source" value="#{bounces.dataSource}"/>
+                                </h:link>
+                            </p:column>
+                        </p:dataTable>   
+                    </h:form>
+                </div>
                 <div id="gaSessionsPanel" style="display: none">
                     <h:form>
                         <p:dataTable var="sessions" value="#{gaController.all}">
@@ -173,53 +254,43 @@
                             </p:column>
                         </p:dataTable>
                     </h:form>
-                </div>    
+                </div>
+                
 
-                <div id="gaBouncesPanel" style="display: none">
+                
+                <div id="gaDevicePanel" style="display: none">
                     <h:form>
-                        <p:dataTable var="bounces" value="#{gaController.all}">
+                        <p:dataTable var="devices" value="#{gaController.all}">
                             <p:column>
                                 <f:facet name="header">
                                     <label>Access Date</label>
                                 </f:facet>
-                                <h:outputText value="#{bounces.accessDate}"/>
-                            </p:column>
-                            <p:column>
-                                <f:facet name="header">
-                                    <label>Bounces</label>
-                                </f:facet>
-                                <h:outputText value="#{bounces.bounces}"/>
-                            </p:column>
-                            <p:column>
-                                <f:facet name="header">
-                                    <label>Bounce Rate</label>
-                                </f:facet>
-                                <h:outputText value="#{bounces.bounceRate}"/>
-                            </p:column>
-                            <p:column>
-                                <f:facet name="header">
-                                    <label>Session Browser</label>
-                                </f:facet>
-                                <h:outputText value="#{bounces.browser}"/>
+                                <h:outputText value="#{devices.accessDate}"/>
                             </p:column>
                             <p:column>
                                 <f:facet name="header">
                                     <label>Session Device</label>
                                 </f:facet>
-                                <h:outputText value="#{bounces.mobileDeviceBranding}"/>
+                                <h:outputText value="#{devices.mobileDeviceBranding}"/>
+                            </p:column>
+                            <p:column>
+                                <f:facet name="header">
+                                    <label>Session Browser</label>
+                                </f:facet>
+                                <h:outputText value="#{devices.browser}"/>
                             </p:column>
                             <p:column>
                                 <f:facet name="header">
                                     <label>Session OS</label>
                                 </f:facet>
-                                <h:outputText value="#{bounces.operatingSystem}"/>
+                                <h:outputText value="#{devices.operatingSystem}"/>
                             </p:column>
                             <p:column>
                                 <f:facet name="header">
-                                    <label>Bounce Web Source</label>
+                                    <label>Device Web Source</label>
                                 </f:facet>
-                                <h:link value="#{bounces.webSource}" outcome="Source">
-                                    <f:param name ="source" value="#{bounces.webSource}"/>
+                                <h:link value="#{devices.webSource}" outcome="Source">
+                                    <f:param name ="source" value="#{devices.webSource}"/>
                                 </h:link>
                             </p:column>
                         </p:dataTable>   
