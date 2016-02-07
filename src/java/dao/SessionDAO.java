@@ -21,9 +21,11 @@ import org.primefaces.model.chart.ChartSeries;
  *
  * @author Harry
  */
-public class SessionDAO {
+public
+        class SessionDAO {
 
-    public SessionDTO find(String id) throws SQLException, NamingException {
+    public
+            SessionDTO find(String id) throws SQLException, NamingException {
         SessionDTO result = new SessionDTO();
         DataSource ds = (DataSource) InitialContext.doLookup("jdbc/uxdash");
 
@@ -47,7 +49,8 @@ public class SessionDAO {
         return result;
     }
 
-    public ArrayList<SessionDTO> listAll() throws SQLException, NamingException {
+    public
+            ArrayList<SessionDTO> listAll() throws SQLException, NamingException {
         ArrayList<SessionDTO> sessions = new ArrayList<>();
         DataSource ds = (DataSource) InitialContext.doLookup("jdbc/uxdash");
 
@@ -70,7 +73,8 @@ public class SessionDAO {
         return sessions;
     }
 
-    public ArrayList<SessionDTO> listRecords(String source) throws SQLException, NamingException {
+    public
+            ArrayList<SessionDTO> listRecords(String source) throws SQLException, NamingException {
         ArrayList<SessionDTO> sessions = new ArrayList<>();
         DataSource ds = (DataSource) InitialContext.doLookup("jdbc/uxdash");
 
@@ -94,7 +98,8 @@ public class SessionDAO {
         return sessions;
     }
 
-    public SessionDTO listID(int id) throws SQLException, NamingException {
+    public
+            SessionDTO listID(int id) throws SQLException, NamingException {
         SessionDTO result = new SessionDTO();
         DataSource ds = (DataSource) InitialContext.doLookup("jdbc/uxdash");
 
@@ -119,7 +124,8 @@ public class SessionDAO {
         return result;
     }
 
-    public void add(SessionDTO session) throws NoSuchAlgorithmException, SQLException, NamingException {
+    public
+            void add(SessionDTO session) throws NoSuchAlgorithmException, SQLException, NamingException {
 
         DataSource ds = (DataSource) InitialContext.doLookup("jdbc/uxdash");
 
@@ -138,7 +144,8 @@ public class SessionDAO {
         }
     }
 
-    public BarChartModel getModel() throws SQLException, NamingException {
+    public
+            BarChartModel getModel() throws SQLException, NamingException {
         BarChartModel model = new BarChartModel();
         ChartSeries sessions = new ChartSeries();
         ArrayList<SessionDTO> sDTO = new ArrayList<>();
@@ -175,7 +182,8 @@ public class SessionDAO {
         return model;
     }
 
-    public BarChartModel getSourceModel(String source) throws SQLException, NamingException {
+    public
+            BarChartModel getSourceModel(String source) throws SQLException, NamingException {
         BarChartModel model = new BarChartModel();
         ChartSeries sessions = new ChartSeries();
         ArrayList<SessionDTO> sDTO = new ArrayList<>();
@@ -210,7 +218,7 @@ public class SessionDAO {
         xAxis.setLabel("Date(by day)");
 
         Axis yAxis = model.getAxis(AxisType.Y);
-        yAxis.setLabel("Session Count");       
+        yAxis.setLabel("Session Count");
         return model;
     }
 

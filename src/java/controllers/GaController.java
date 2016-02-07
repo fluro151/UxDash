@@ -12,6 +12,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import javax.enterprise.context.RequestScoped;
 import javax.enterprise.context.SessionScoped;
+import javax.faces.event.ActionEvent;
 
 import javax.inject.Named;
 import javax.naming.NamingException;
@@ -29,6 +30,7 @@ public class GaController implements Serializable {
     private BarChartModel barModel = new BarChartModel();
     private LineChartModel lineModel = new LineChartModel();
     private PieChartModel deviceModel = new PieChartModel();
+    private String buttonId;
 
     public PieChartModel getDeviceModel() throws SQLException, NamingException {
         GaDAO analyticsDAO = new GaDAO();
@@ -55,11 +57,18 @@ public class GaController implements Serializable {
         this.lineModel = lineModel;
     }
     
-    public LineChartModel getLineModel() throws SQLException, NamingException {
+    public LineChartModel getLineModel() throws SQLException, NamingException, Exception {
         GaDAO analyticsDAO = new GaDAO();
         this.lineModel = analyticsDAO.getLineModel();
         return lineModel;
     }
+    
+    public void firstDataInsert() throws Exception{
+        System.out.println("TRIGGERED");
+        GaDAO analyticsDAO = new GaDAO();
+        analyticsDAO.firstInsertGaData();
+    }
+    
     
     public GaDTO getGaDTO() {
         return analytics;

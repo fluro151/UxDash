@@ -17,7 +17,7 @@
         </h3>
         <a href ="/uxdash"> BACK </a>
         <div>
-            <p:barChart id="Sessionsbar" value="#{sessionController.getSourceModel(param.source)}"/>
+            <p:lineChart id="Sessionsbar"  animate="true" value="#{sessionController.getSourceModel(param.source)}"/>
             <p:outputPanel> Sessions by Source </p:outputPanel>
         </div>
         <h:form>
@@ -49,7 +49,7 @@
             </p:column>
         </p:dataTable>
         <div>
-            <p:barChart id="Bouncesbar" value="#{bounceController.getSourceModel(param.source)}"/>
+            <p:barChart id="Bouncesbar" animate="true" value="#{bounceController.getSourceModel(param.source)}"/>
             <p:outputPanel> Bounces by Source </p:outputPanel>
         </div>
         <p:dataTable var="BounceRecords" value="#{bounceController.getRecords(param.source)}">    

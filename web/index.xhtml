@@ -5,12 +5,13 @@
       xmlns:p="http://primefaces.org/ui"
       xmlns:f="http://java.sun.com/jsf/core"
       xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
-
+    <meta name="google-signin-client_id" content="953742277332-u4rnbsg09ucjsgf01mvs3det467u1vdp.apps.googleusercontent.com"/>
     <h:head>
         <title>UxDash</title>
 
     </h:head>
     <h:body>
+        <script src="https://apis.google.com/js/platform.js" async ="defer"></script>
         <script type="text/javascript">
             <!--
             function toggle_visibility(id) {
@@ -20,6 +21,18 @@
                 else
                     e.style.display = 'inline-table';
             }
+
+            function onSignIn(googleUser) {
+                var profile = googleUser.getBasicProfile();
+                var id_token = googleUser.getAuthResponse().id_token;
+                console.log('ID: ' + profile.getId()); // Do not send to your backend! Use an ID token instead.
+                console.log('Name: ' + profile.getName());
+                console.log('Image URL: ' + profile.getImageUrl());
+                console.log('Email: ' + profile.getEmail());
+                toggle_visibility(signOut);
+                
+            }
+            
 
             //-->
         </script>
@@ -31,45 +44,80 @@
                 position: relative;
                 text-align: center;
                 margin: 20px;
+                
             }
             body{
-                
+
                 width: 100%;
                 margin: 0 auto;
                 text-align: center;
                 white-space: normal;
             }
             ::-webkit-scrollbar { 
-    display: none; 
-}
-.button {
-    text-decoration: none;
-    display: inline-table;
-    padding: 5px 15px;
-    outline: none;
-    text-decoration: none;
-    text-align: center;
-    font-size: 14px;
-    color: white;
-    text-shadow: none;
-    font-weight: normal;
-    background-color: #66BB6A;
-    border-radius: 2px;
-    text-shadow: none;
-    font-family: arial;
-    cursor: pointer;
-    
-    
-    
-    
-    
-}
+                display: none; 
+            }
+            .button {
+                text-decoration: none;
+                display: inline-table;
+                padding: 5px 15px;
+                outline: none;
+                text-decoration: none;
+                text-align: center;
+                font-size: 14px;
+                color: white;
+                text-shadow: none;
+                font-weight: normal;
+                background-color: #66BB6A;
+                border-radius: 2px;
+                text-shadow: none;
+                font-family: arial;
+                cursor: pointer;
+            }
+            .g-signin2{
+                text-align: right;
+                display: inherit;
+                margin: 0 auto;
+                position: fixed;
+                z-index: 100;
+            }
+            #signOut, dataSetUp {
+                text-align: center;
+                text-height:text-size;
+                color: gray;
+                text-decoration: none;
+                font-family: arial;
+                font-size: 14px;
+                position: fixed;
+                z-index: 100;
+                top: 40px;
+                left: 0px;
+                background-color: white;
+                height: 36px;
+                width: 120px;
+                box-shadow: 0 2px 4px 0 rgba(0,0,0,.25);
+                border-radius: 1px;
+                
+                
+
+            }
         </style>
 
 
         <h:form id="form">
+            <a href="#" class="button" onclick="#{gaController.firstDataInsert()}"> data </a>
+            
+<!--            <div class="g-signin2" data-onsuccess="onSignIn,toggle_visibility(signOut)"></div>
+            <a href="#" id="signOut" onclick="signOut();">Sign out</a>
+            <script>
+                function signOut() {
+                    var auth2 = gapi.auth2.getAuthInstance();
+                    auth2.signOut().then(function () {
+                        console.log('User signed out.');
+                    });
+                }
+            </script>-->
             <p:fileUpload id="upload"  fileUploadListener="#{contentController.uploadContent}"  mode="advanced" dragDropSupport="false"
-                                  update="form" sizeLimit="100000" fileLimit="3" allowTypes="/(\.|\/)(csv|txt|xls|xlsx|doc|docx)$/"/>
+                          update="form" sizeLimit="100000" fileLimit="3" allowTypes="/(\.|\/)(csv|txt|xls|xlsx|doc|docx)$/"/>
             <span class="button">
                 <a href="#" class="button" onclick="toggle_visibility('sessionBar');">Toggle</a>
             </span>
@@ -87,7 +135,7 @@
 
                     <div id="gaSession" class="display">
                         <a href="#" onclick="toggle_visibility('gaSessionsPanel');">
-                            <p:lineChart id="sessionsChart" value="#{gaController.lineModel}"  animate="true" style="width:400px;height:300px; margin: 0 auto;" title="Sessions/Date" xaxisLabel="Date" yaxisLabel="Session Count"/>
+                            <p:lineChart id="sessionsChart" value="#{gaController.lineModel}"   animate="true" style="width:400px;height:300px; margin: 0 auto; " title="Sessions/Date" xaxisLabel="Date" yaxisLabel="Session Count"/>
                         </a>
                     </div>
 
@@ -100,7 +148,7 @@
 
                     <div class="display">
                         <a href="#" onclick="toggle_visibility('npsPanel');">
-                            <p:chart id="npsChart" type="metergauge" model="#{npsController.model}" style="width:400px;height:300px;margin: 0 auto;"/>
+                            <p:chart  id="npsChart" type="metergauge" model="#{npsController.model}" style="width:400px;height:300px;margin: 0 auto;"/>
                         </a>
                     </div>
 
@@ -110,10 +158,10 @@
                         </a>
                     </div>
                 </div>
-                
-<div id="gaBouncesPanel" style="display: none">
+
+                <div id="gaBouncesPanel" style="display: none">
                     <h:form>
-                        <p:dataTable var="bounces" value="#{gaController.all}" sortMode="multiple">
+                        <p:dataTable var="bounces" value="#{gaController.all}"  sortMode="single">
                             <p:column sortBy="#{bounces.accessDate}">
                                 <f:facet name="header">
                                     <label>Access Date</label>
@@ -255,9 +303,9 @@
                         </p:dataTable>
                     </h:form>
                 </div>
-                
 
-                
+
+
                 <div id="gaDevicePanel" style="display: none">
                     <h:form>
                         <p:dataTable var="devices" value="#{gaController.all}">
@@ -328,8 +376,8 @@
                         </p:dataTable>   
                     </h:form>
                 </div>
-                
-                
+
+
                 <div id="npsPanel" style="display:none">
                     <h:form>
                         <p:dataTable var="nps" value="#{npsController.all}">
@@ -351,7 +399,7 @@
                                 </f:facet>
                                 <h:outputText value="#{nps.npsWhole}"/>
                             </p:column>
-                            
+
                         </p:dataTable>   
                     </h:form>
                 </div>
