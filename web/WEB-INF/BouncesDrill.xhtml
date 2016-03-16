@@ -1,0 +1,62 @@
+<ui:composition 
+    xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:f="http://xmlns.jcp.org/jsf/core"
+    xmlns:h="http://xmlns.jcp.org/jsf/html"
+    xmlns:p="http://primefaces.org/ui"
+    xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
+    
+                        <h:form>
+                            <p:dataTable var="bounces" value="#{gaController.all}"  sortMode="single">
+                                <p:column sortBy="#{bounces.accessDate}">
+                                    <f:facet name="header">
+                                        <label>Access Date</label>
+                                    </f:facet>
+                                    <h:outputText value="#{bounces.accessDate}"/>
+                                </p:column>
+                                <p:column sortBy="#{bounces.bounces}">
+                                    <f:facet name="header" >
+                                        <label>Bounces</label>
+                                    </f:facet>
+                                    <h:outputText value="#{bounces.bounces}"/>
+                                </p:column>
+                                <p:column sortBy="#{bounces.bounceRate}">
+                                    <f:facet name="header">
+                                        <label>Bounce Rate</label>
+                                    </f:facet>
+                                    <h:outputText value="#{bounces.bounceRate}"/>
+                                </p:column>
+                                <p:column sortBy="#{bounces.browser}">
+                                    <f:facet name="header">
+                                        <label>Session Browser</label>
+                                    </f:facet>
+                                    <h:outputText value="#{bounces.browser}"/>
+                                </p:column>
+                                <p:column sortBy="#{bounces.mobileDeviceBranding}">
+                                    <f:facet name="header">
+                                        <label>Session Device</label>
+                                    </f:facet>
+                                    <h:outputText value="#{bounces.mobileDeviceBranding}"/>
+                                </p:column>
+                                <p:column sortBy="#{bounces.operatingSystem}">
+                                    <f:facet name="header">
+                                        <label>Session OS</label>
+                                    </f:facet>
+                                    <h:outputText value="#{bounces.operatingSystem}"/>
+                                </p:column>
+                                <p:column sortBy="#{bounces.webSource}">
+                                    <f:facet name="header">
+                                        <label>Session web</label>
+                                    </f:facet>
+                                    <h:outputText value="#{bounces.webSource}"/>
+                                </p:column>
+                                <p:column sortBy="#{bounces.dataSource}">
+                                    <f:facet name="header">
+                                        <label>Session Web Source</label>
+                                    </f:facet>
+                                    <h:link value="#{bounces.dataSource}" outcome="Source">
+                                        <f:param name ="source" value="#{bounces.dataSource}"/>
+                                    </h:link>
+                                </p:column>
+                            </p:dataTable>   
+                        </h:form>
+</ui:composition>

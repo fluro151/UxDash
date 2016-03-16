@@ -69,41 +69,6 @@ public class GaDAO {
     }
     
     //Model of Bounces over Time
-//    public BarChartModel getDeviceModel() throws SQLException,  NamingException {
-//        BarChartModel model = new BarChartModel();
-//        ChartSeries bounces = new ChartSeries();
-//        ArrayList<GaDTO> analytics = new ArrayList<>();
-//        DataSource ds = (DataSource) InitialContext.doLookup("jdbc/uxdash");
-//        
-//        try (Connection conn = ds.getConnection(); PreparedStatement ps = conn.prepareStatement (
-//                "select mobileDeviceBranding, count(mobileDeviceBranding) Total "
-//                +"from googleAnalytics "
-//                +"group by mobileDeviceBranding "
-//                +"order by mobileDeviceBranding "
-//        );) {
-//            
-//            ResultSet rs = ps.executeQuery();
-//            GaDTO result = new GaDTO();
-//            while (rs.next()) {
-//                int Count = rs.getInt("Total");
-//                result.setMobileDeviceBranding(rs.getString("mobileDeviceBranding"));
-//                
-//            bounces.set(result.getMobileDeviceBranding(), Count);
-//            }
-//            
-//        }
-//        model.addSeries(bounces);
-//        model.setTitle("Device Usage");
-//        Axis xAxis = model.getAxis(AxisType.X);
-//        xAxis.setLabel("Devices");
-//        xAxis.setTickAngle(-50);
-//        Axis yAxis = model.getAxis(AxisType.Y);
-//        yAxis.setLabel("Count");
-//        
-//        return model;
-//        
-//    }
-    //Model of Bounces over Time
     public BarChartModel getBarModel() throws SQLException,  NamingException {
         BarChartModel model = new BarChartModel();
         ChartSeries bounces = new ChartSeries();
@@ -111,19 +76,22 @@ public class GaDAO {
         DataSource ds = (DataSource) InitialContext.doLookup("jdbc/uxdash");
         
         try (Connection conn = ds.getConnection(); PreparedStatement ps = conn.prepareStatement (
-                "select accessDate, sum(bounces) Total "
+                "select monthInt,yearInt, sum(bounces) Total "
                 +"from googleAnalytics "
-                +"group by accessDate "
-                +"order by accessDate "
+                +"group by MonthInt,Yearint "
+                +"order by Yearint, MonthInt ASC "
         );) {
             
             ResultSet rs = ps.executeQuery();
             GaDTO result = new GaDTO();
             while (rs.next()) {
                 result.setBounces(rs.getInt("Total"));
-                result.setAccessDate(rs.getDate("accessDate"));
+//                result.setAccessDate(rs.getDate("accessDate"));
+                result.setMonth(rs.getInt("monthint"));
+                result.setYear(rs.getInt("yearInt"));
+                String temp = Integer.toString(rs.getInt("yearInt"));
                 
-            bounces.set(result.getAccessDate(), result.getBounces());
+            bounces.set(rs.getString("monthint") + " " + temp, result.getBounces());
             }
             
         }
@@ -148,18 +116,21 @@ public class GaDAO {
         DataSource ds = (DataSource) InitialContext.doLookup("jdbc/uxdash");
         
         try (Connection conn = ds.getConnection(); PreparedStatement ps = conn.prepareStatement(
-                "select accessDate, sum(sessions) Total "
+                "select monthint,yearInt,  sum(sessions) Total "
                 +"from googleAnalytics "
-                +"group by accessDate "
-                +"order by accessDate "
+                +"group by MonthInt,Yearint "
+                +"order by Yearint, MonthInt ASC "
         );) {
             
             ResultSet rs = ps.executeQuery();
             GaDTO result = new GaDTO();
             while (rs.next()) {
                 result.setSessions(rs.getInt("Total"));
-                result.setAccessDate(rs.getDate("accessDate"));
-            sessions.set(rs.getDate("accessDate"), result.getSessions());
+                //result.setAccessDate(rs.getDate("accessDate"));
+                result.setMonth(rs.getInt("monthint"));
+                result.setYear(rs.getInt("yearInt"));
+                String temp = Integer.toString(rs.getInt("yearInt"));
+            sessions.set(rs.getInt("monthint") + " " + temp, result.getSessions());
             }
     }
         model.addSeries(sessions);
@@ -168,12 +139,76 @@ public class GaDAO {
         Axis xAxis = model.getAxis(AxisType.X);
         xAxis.setLabel("Date");
         
-        xAxis.setTickAngle(-50);
+        xAxis.setTickAngle(50);
         Axis yAxis = model.getAxis(AxisType.Y);
         yAxis.setLabel("Session Count");
         return model;
     }
-
+    
+    public LineChartModel getDurationModel() throws SQLException, NamingException {
+        LineChartModel model = new LineChartModel();
+        ChartSeries duration = new ChartSeries();
+        ArrayList<GaDTO> gaDTO = new ArrayList<>();
+        DataSource ds = (DataSource) InitialContext.doLookup("jdbc/uxdash");
+        
+        try (Connection conn = ds.getConnection(); PreparedStatement ps = conn.prepareStatement(
+                "select monthint,yearint, AVG(sessionduration) total "
+                +"from googleAnalytics "
+                +"group by MonthInt, YearInt "
+                +"order by YearInt, MonthInt ASC "
+        );) {
+            ResultSet rs = ps.executeQuery();
+            GaDTO result = new GaDTO();
+            while(rs.next()) {
+                result.setSessionDuration(rs.getInt("total"));
+                result.setMonth(rs.getInt("monthInt"));
+                result.setYear(rs.getInt("yearInt"));
+                String temp = Integer.toString(rs.getInt("yearInt"));
+            duration.set(rs.getInt("monthInt") + " " + temp,result.getSessionDuration());
+            }
+        }
+        model.addSeries(duration);
+        model.setTitle("Avg Duration/Time");
+        Axis xAxis = model.getAxis(AxisType.X);
+        xAxis.setLabel("Date");
+        xAxis.setTickAngle(50);
+        Axis yAxis = model.getAxis(AxisType.Y);
+        yAxis.setLabel("Avg Duration (seconds)");
+        return model;
+    }
+    
+        public LineChartModel getNewSessionsModel() throws SQLException, NamingException {
+        LineChartModel model = new LineChartModel();
+        ChartSeries duration = new ChartSeries();
+        ArrayList<GaDTO> gaDTO = new ArrayList<>();
+        DataSource ds = (DataSource) InitialContext.doLookup("jdbc/uxdash");
+        
+        try (Connection conn = ds.getConnection(); PreparedStatement ps = conn.prepareStatement(
+                "select monthint,yearint, sum(percentNewSessions) Total "
+                +"from googleAnalytics "
+                +"group by MonthInt, YearInt "
+                +"order by YearInt, MonthInt ASC "
+        );) {
+            ResultSet rs = ps.executeQuery();
+            GaDTO result = new GaDTO();
+            while(rs.next()) {
+                result.setPercentNewSessions(rs.getDouble("Total"));
+                result.setMonth(rs.getInt("monthInt"));
+                result.setYear(rs.getInt("yearInt"));
+                String temp = Integer.toString(rs.getInt("yearInt"));
+            duration.set(rs.getInt("monthInt") + " " + temp,result.getPercentNewSessions());
+            }
+        }
+        model.addSeries(duration);
+        model.setTitle("% New Sessions/Time");
+        Axis xAxis = model.getAxis(AxisType.X);
+        xAxis.setLabel("Date");
+        xAxis.setTickAngle(50);
+        Axis yAxis = model.getAxis(AxisType.Y);
+        yAxis.setLabel("% New Sessions");
+        return model;
+    }
+        
     
     public ArrayList<GaDTO> listRecords(String source) throws SQLException, NamingException{
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
@@ -240,8 +275,8 @@ public class GaDAO {
                         DataSource ds = (DataSource) InitialContext.doLookup("jdbc/uxdash");    
                         try(Connection conn = ds.getConnection(); PreparedStatement ps = conn.prepareStatement(
                                 "Insert into GOOGLEANALYTICS "
-                                +"(WEBSOURCE,BROWSER,OPERATINGSYSTEM,MOBILEDEVICEBRANDING,USERS,SESSIONS,BOUNCES,BOUNCERATE,SESSIONDURATION,ACCESSDATE) values "
-                                +"(?,?,?,?,?,?,?,?,?,?) "
+                                +"(WEBSOURCE,BROWSER,OPERATINGSYSTEM,MOBILEDEVICEBRANDING,USERS,SESSIONS,BOUNCES,BOUNCERATE,SESSIONDURATION,ACCESSDATE,MONTHINT,YEARINT) values "
+                                +"(?,?,?,?,?,?,?,?,?,?,?,?) "
                         );) {
                             
                         
@@ -256,6 +291,8 @@ public class GaDAO {
                             ps.setString(7, rowValues.get(7));
                             ps.setString(8, rowValues.get(8));
                             ps.setString(9, rowValues.get(9));
+                            ps.setInt(11, setMonth((Date) toDate(rowValues.get(4))));
+                            ps.setInt(12, setYear((Date) toDate(rowValues.get(4))));
                             ps.executeUpdate();
                         
                             
@@ -267,6 +304,52 @@ public class GaDAO {
                 }
                 
             }
+    }
+    
+    public void insertDateGaData() throws Exception{
+        GaData data = getDateResults();
+        boolean rows;
+        System.out.println("gathering date data...");
+            if(data.getTotalResults() > 0) {
+                System.out.println("data gathered. Parsing...");
+                for (List<String> rowValues : data.getRows()) {
+                        System.out.println("Validating date Records...");
+                        rows = validateDateData(rowValues.get(0));
+                        if (rows == false) {
+                            
+                        
+                        System.out.println("New Row Queryed - inserting...");
+                        DataSource ds = (DataSource) InitialContext.doLookup("jdbc/uxdash");    
+                        try(Connection conn = ds.getConnection(); PreparedStatement ps = conn.prepareStatement(
+                                "Insert into GOOGLEANALYTICS "
+                                +"(USERS,SESSIONS,BOUNCES,BOUNCERATE,SESSIONDURATION,ACCESSDATE,MONTHINT,YEARINT,PERCENTNEWSESSIONS,TIMEONPAGE) values "
+                                +"(?,?,?,?,?,?,?,?,?,?) "
+                        );) {
+                            
+                        
+                            
+                            ps.setString(1, rowValues.get(1));
+                            ps.setString(2, rowValues.get(2));
+                            ps.setString(3, rowValues.get(5));
+                            ps.setString(4, rowValues.get(6));
+                            ps.setString(5, rowValues.get(3));
+                            ps.setDate(6, (Date) toDate(rowValues.get(0)));
+                            ps.setInt(7, setMonth((Date) toDate(rowValues.get(0))));
+                            ps.setInt(8, setYear((Date) toDate(rowValues.get(0))));
+                            ps.setDouble(9, Double.parseDouble(rowValues.get(4)));
+                            ps.setDouble(10, Double.parseDouble(rowValues.get(7)));
+                            ps.executeUpdate();
+                        
+                            
+                        
+                        
+                    }
+                        }
+                    
+                }
+                
+            }
+            System.out.println("Analytics Query Completed");
     }
 
     private java.util.Date toDate(String get) throws ParseException {
@@ -337,5 +420,94 @@ public class GaDAO {
         
         return Duplicate;
     }
+    }
+
+    private boolean validateDateData(String get0) throws NamingException, SQLException, ParseException {
+        boolean Duplicate = false;
+       // System.out.println(get0 + " " + get1+ " " + get2+ " " + get3+ " " + get4+ " " + get5+ " " + get6+ " " + get7+ " " + get8+ " " + get9);
+        
+        DataSource ds = (DataSource) InitialContext.doLookup("jdbc/uxdash");
+        
+        try (Connection conn = ds.getConnection(); PreparedStatement ps = conn.prepareStatement (
+                "Select accessDate "
+                +"from googleAnalytics "
+        );) {
+          ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                GaDTO result = new GaDTO();
+                result.setAccessDate(rs.getDate("accessDate"));
+                
+                
+                
+                if (result.getAccessDate().equals(toDate(get0))) {
+                    
+                    
+                    Duplicate = true;
+                    break;
+                    
+                }
+                else {
+                    
+                    Duplicate = false;
+             }
+            }
+        
+        
+        return Duplicate;
+    }
+    }
+    
+    private int setMonth(Date date) {
+        int value;
+        String month = null;
+        value = date.getMonth() + 1;
+        if (value == 1) {
+            month = "Jan";
+        }
+        else if (value == 2) {
+            month = "Feb";
+        }
+        else if (value == 3) {
+            month = "Mar";
+        }
+        else if (value == 4) {
+            month = "Apr";
+        }
+        else if (value == 5) {
+            month = "May";
+        }
+        else if (value == 6) {
+            month = "Jun";
+        }
+        else if (value == 7) {
+            month = "Jul";
+        }
+        else if (value == 8) {
+            month = "Aug";
+        }
+        else if (value == 9) {
+            month = "Sep";
+        }
+        else if (value == 10) {
+            month = "Oct";
+        }
+        else if (value == 11) {
+            month = "Nov";
+        }
+        else if (value == 12) {
+            month = "Dec";
+        }
+        return value;
+    }
+
+    private int setYear(Date date) {
+        int year = 0;
+        String longDate;
+        String temp;
+        longDate = date.toString();
+ 
+        temp = longDate.substring(0, 4);
+        year = Integer.parseInt(temp);
+        return year;
     }
 }

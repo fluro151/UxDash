@@ -23,7 +23,48 @@ public class GaDTO {
     private int bounces;
     private double bounceRate;
     private Date accessDate;
+    private int Month;
+    private int Year;
     private String dataSource;
+    private double percentNewSessions;
+    private double timeOnPage;
+
+    public double getPercentNewSessions() {
+        return percentNewSessions;
+    }
+
+    public void setPercentNewSessions(double percentNewSessions) {
+        this.percentNewSessions = percentNewSessions;
+    }
+
+    public double getTimeOnPage() {
+        return timeOnPage;
+    }
+
+    public void setTimeOnPage(double timeOnPage) {
+        this.timeOnPage = timeOnPage;
+    }
+
+
+    public int getMonth() {
+        return Month;
+    }
+
+    public void setMonth(int Month) {
+        this.Month = Month;
+    }
+
+    public int getYear() {
+        return Year;
+    }
+
+    public void setYear(int Year) {
+        this.Year = Year;
+    }
+  
+
+
+    
 
     public String getDataSource() {
         return dataSource;

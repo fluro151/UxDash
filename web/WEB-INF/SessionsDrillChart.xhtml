@@ -1,0 +1,22 @@
+<ui:composition 
+    xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:f="http://xmlns.jcp.org/jsf/core"
+    xmlns:h="http://xmlns.jcp.org/jsf/html"
+    xmlns:p="http://primefaces.org/ui"
+    xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
+
+    <h2> Sessions Drill Down </h2>
+    <div class="display" style="display: inherit">
+
+        <p:lineChart id="DurationChart" value="#{gaController.durationModel}" xaxisAngle="50"  rendered="true"  animate="true" style=" display: inline-table;width:400px;height:300px; margin: 0 auto; " title="Avg Session Duration/Date" xaxisLabel="Date" yaxisLabel="Avg Session Duration"/>
+
+    </div>
+
+    <div class="display"  style="display: inherit">
+
+        <p:lineChart id="NewSessionsChart" value="#{gaController.newSessionsModel}" xaxisAngle="50" rendered="true"   animate="true" style="display: inline-table; width:400px;height:300px; margin: 0 auto; " title="% New Sessions/Date" xaxisLabel="Date" yaxisLabel="% New Sessions"/>
+
+    </div>
+
+
+</ui:composition>

@@ -73,6 +73,11 @@ public class HelloAnalytics {
       return data;
   }
   
+  public static GaData getDateResults() throws Exception {
+      GaData data = getDateResults(getAnalytics(),getProfile());
+      return data;
+  }
+  
 
   private static Analytics initializeAnalytics() throws Exception {
     // Initializes an authorized analytics service object.
@@ -140,6 +145,15 @@ public class HelloAnalytics {
             .setDimensions("ga:source,ga:browser,ga:operatingSystem,ga:mobileDeviceBranding,ga:date")
             .setSort("ga:users")
         .execute();
+  }
+  
+  private static GaData getDateResults(Analytics analytics, String profileId) throws IOException {
+      return analytics.data().ga()
+              
+          .get("ga:" + profileId, "2015-01-01", "today", "ga:users,ga:sessions,ga:avgSessionDuration,ga:percentNewSessions,ga:bounces,ga:bounceRate,ga:timeOnPage ")
+              .setDimensions("ga:date")
+              .setSort("ga:date")
+          .execute();
   }
   
  

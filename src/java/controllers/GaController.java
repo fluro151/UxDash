@@ -30,7 +30,31 @@ public class GaController implements Serializable {
     private BarChartModel barModel = new BarChartModel();
     private LineChartModel lineModel = new LineChartModel();
     private PieChartModel deviceModel = new PieChartModel();
+    private LineChartModel durationModel = new LineChartModel();
+    private LineChartModel newSessionsModel = new LineChartModel();
     private String buttonId;
+    
+    public void setDurationModel(LineChartModel durationModel) {
+        this.durationModel = durationModel;
+    }
+
+    public void setNewSessionsModel(LineChartModel newSessionsModel) {
+        this.newSessionsModel = newSessionsModel;
+    }
+
+    
+    public LineChartModel getDurationModel() throws SQLException, NamingException {
+        GaDAO analyticsDAO = new GaDAO();
+        this.durationModel = analyticsDAO.getDurationModel();
+        return durationModel;
+    }
+
+    public LineChartModel getNewSessionsModel() throws SQLException, NamingException {
+        GaDAO analyticsDAO = new GaDAO();
+        this.newSessionsModel = analyticsDAO.getNewSessionsModel();
+        return newSessionsModel;
+    }
+    
 
     public PieChartModel getDeviceModel() throws SQLException, NamingException {
         GaDAO analyticsDAO = new GaDAO();
@@ -67,6 +91,11 @@ public class GaController implements Serializable {
         System.out.println("TRIGGERED");
         GaDAO analyticsDAO = new GaDAO();
         analyticsDAO.firstInsertGaData();
+    }
+    
+    public void firstDateInsert() throws Exception{
+        GaDAO analyticsDAO = new GaDAO();
+        analyticsDAO.insertDateGaData();
     }
     
     

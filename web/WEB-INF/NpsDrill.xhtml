@@ -1,0 +1,32 @@
+<ui:composition 
+    xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:f="http://xmlns.jcp.org/jsf/core"
+    xmlns:h="http://xmlns.jcp.org/jsf/html"
+    xmlns:p="http://primefaces.org/ui"
+    xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
+    
+                        <h:form>
+                            <p:dataTable var="nps" value="#{npsController.all}">
+                                <p:column>
+                                    <f:facet name="header">
+                                        <label>Promoting Participants</label>
+                                    </f:facet>
+                                    <h:outputText value="#{nps.taskPromoters}"/>
+                                </p:column>
+                                <p:column>
+                                    <f:facet name="header">
+                                        <label>Detracting Participants</label>
+                                    </f:facet>
+                                    <h:outputText value="#{nps.taskDetractors}"/>
+                                </p:column>
+                                <p:column>
+                                    <f:facet name="header">
+                                        <label>Net Promoter Score</label>
+                                    </f:facet>
+                                    <h:outputText value="#{nps.npsWhole}"/>
+                                </p:column>
+
+                            </p:dataTable>   
+                        </h:form>
+                    
+</ui:composition>

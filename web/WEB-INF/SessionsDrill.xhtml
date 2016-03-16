@@ -1,0 +1,63 @@
+<ui:composition 
+    xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:f="http://xmlns.jcp.org/jsf/core"
+    xmlns:h="http://xmlns.jcp.org/jsf/html"
+    xmlns:p="http://primefaces.org/ui"
+    xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
+    
+                        <h:form>
+                            <p:dataTable var="sessions" value="#{gaController.all}">
+                                <p:column>
+                                    <f:facet name="header">
+                                        <label>Access Date</label>
+                                    </f:facet>
+                                    <h:outputText value="#{sessions.accessDate}"/>
+                                </p:column>
+                                <p:column>
+                                    <f:facet name="header">
+                                        <label>Sessions</label>
+                                    </f:facet>
+                                    <h:outputText value="#{sessions.sessions}"/>
+                                </p:column>
+                                <p:column>
+                                    <f:facet name="header">
+                                        <label>Session duration</label>
+                                    </f:facet>
+                                    <h:outputText value="#{sessions.sessionDuration}"/>
+                                </p:column>
+                                <p:column>
+                                    <f:facet name="header">
+                                        <label>Session Browser</label>
+                                    </f:facet>
+                                    <h:outputText value="#{sessions.browser}"/>
+                                </p:column>
+                                <p:column>
+                                    <f:facet name="header">
+                                        <label>Session Device</label>
+                                    </f:facet>
+                                    <h:outputText value="#{sessions.mobileDeviceBranding}"/>
+                                </p:column>
+                                <p:column>
+                                    <f:facet name="header">
+                                        <label>Session OS</label>
+                                    </f:facet>
+                                    <h:outputText value="#{sessions.operatingSystem}"/>
+                                </p:column>
+                                <p:column>
+                                    <f:facet name="header">
+                                        <label>Session web</label>
+                                    </f:facet>
+                                    <h:outputText value="#{sessions.webSource}"/>
+                                </p:column>
+                                <p:column>
+                                    <f:facet name="header">
+                                        <label>Session Web Source</label>
+                                    </f:facet>
+                                    <h:link value="#{sessions.dataSource}" outcome="Source">
+                                        <f:param name ="source" value="#{sessions.dataSource}"/>
+                                    </h:link>
+                                </p:column>
+                            </p:dataTable>   
+                        </h:form>
+                    
+</ui:composition>
